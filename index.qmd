@@ -1,5 +1,5 @@
 ---
-title: "My website and data analysis portfolio"
+title: "Abbie's Website and Data Analysis Portfolio"
 output: 
   html_document:
     toc: FALSE
@@ -11,6 +11,7 @@ output:
 
 Welcome to **my website** and _data analysis portfolio._ 
 
+I'm excited to get started with this class!
 
 * Please use the `Menu Bar` above to look around.
-* Have fun!
+

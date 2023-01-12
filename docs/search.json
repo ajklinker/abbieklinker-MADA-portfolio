@@ -1,0 +1,37 @@
+[
+  {
+    "objectID": "aboutme.html",
+    "href": "aboutme.html",
+    "title": "About me",
+    "section": "",
+    "text": "About Me\nHi everyone! My name is Abbie Klinker and I am a second year master’s student in nutrition. I am currently researching food insecurity and food assistance around the state.\nWhile I’m currently studying nutrition I also have a background in statistics. I worked as a project lead in a data analysis consulting firm throughout undergrad and am excited to get back into the RStudio and data analysis space. I want to use this course to refresh my skills and work with some big data sets.\n\nMy fun fact(s)\nI did my undergrad at Miami of Ohio and am originally from Inidana. I am currently on the UGA rowing team and am a washed up runner. I love being outside hiking, hammocking, and more!\n\n\n\nData Analysis Links"
+  },
+  {
+    "objectID": "coding_exercise.html",
+    "href": "coding_exercise.html",
+    "title": "R Coding Exercise",
+    "section": "",
+    "text": "Placeholder file for the future R coding exercise."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Abbie’s Website and Data Analysis Portfolio",
+    "section": "",
+    "text": "Hello\n\nAnd hello again\nWelcome to my website and data analysis portfolio.\nI’m excited to get started with this class!\n\nPlease use the Menu Bar above to look around."
+  },
+  {
+    "objectID": "tidytuesday_exercise.html",
+    "href": "tidytuesday_exercise.html",
+    "title": "Tidy Tuesday Exercise",
+    "section": "",
+    "text": "Placeholder file for the future Tidy Tuesday exercise."
+  },
+  {
+    "objectID": "visualization_exercise.html",
+    "href": "visualization_exercise.html",
+    "title": "Visualization Exercise",
+    "section": "",
+    "text": "Placeholder file for the future visualization exercise."
+  }
+]

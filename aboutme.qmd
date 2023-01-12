@@ -5,4 +5,20 @@ output:
       toc: FALSE
 ---
 
-Add some text and a figure describing myself.
+Hi everyone! My name is Abbie Klinker and I am a second year master's student in nutrition. I am currently researching food insecurity and food assistance around the state.
+
+While I'm currently studying nutrition I also have a background in statistics. I worked as a project lead in a data analysis consulting firm throughout undergrad and am excited to get back into the RStudio and data analysis space. I want to use this course to refresh my skills and work with some big data sets.
+
+![](20211031_180323_capture.jpg){fig-align="right" width="500"}
+
+### My fun fact(s)
+
+I did my undergrad at Miami of Ohio and am originally from Inidana. I am currently on the UGA rowing team and am a washed up runner. I love being outside hiking, hammocking, and more!
+
+![Our boat at nationals!](IMG_5023.jpg)
+
+# Data Analysis Links
+
+I saw this TikTok the other day and it pretty much explained my undergrad, especially with studying nutrition at the same time! Now working in research it has been super helpful to have that experience.
+
+<https://www.tiktok.com/t/ZTRgaQxY9/>

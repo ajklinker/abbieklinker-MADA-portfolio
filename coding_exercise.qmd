@@ -5,4 +5,134 @@ output:
     toc: FALSE
 ---
 
-Placeholder file for the future R coding exercise.
+## Setting Up the Exercise
+
+```{r}
+library(tidyverse)
+library(dslabs)
+
+#look at help file for gapminder data
+#help(gapminder)
+
+#get an overview of data structure
+str(gapminder)
+
+#get a summary of data
+summary(gapminder)
+
+#determine the type of object gapminder is
+class(gapminder)
+
+#get better view of the data
+glimpse(gapminder)
+```
+
+## Examining Africa Data
+
+```{r}
+africadata<- gapminder %>%
+  filter(continent == "Africa")
+
+str(africadata)
+summary(africadata)
+
+```
+
+### Infant Mortality and Life Expectancy
+
+``` {r}
+mort_expect <- africadata %>%
+  select(infant_mortality, life_expectancy, region) #kept region for sake of visualization
+
+#examine data 
+str(mort_expect)
+summary(mort_expect)
+
+#Plot
+ggplot()+
+  geom_point(aes(x=infant_mortality, y=life_expectancy, color=region), data=mort_expect)+ #kept region to more easily see trends since there's a lot of countries.
+  xlab("Infant Mortality Rate")+ ylab("Life Expectancy (Yrs)")+
+  theme_bw()
+```
+
+### Population and Life Expectancy
+
+``` {r}
+pop_expect <- africadata %>%
+  select(population, life_expectancy, region) #kept region for same reason as prior plot
+
+#examine data 
+str(pop_expect)
+summary(pop_expect)
+
+#Plot
+ggplot()+
+  geom_point(aes(x=log(population), y=life_expectancy, color=region), data=pop_expect)+
+  theme_bw()+ xlab("Log Population")+ ylab("Life Expectancy (Yrs)")
+
+```
+
+## Select Years
+**Which years have the data missing for infant mortality?**
+
+```{r}
+mort_expect_years <- africadata %>%
+  select(infant_mortality, life_expectancy, region, year)%>% #include years
+  filter(is.na(infant_mortality)) #look for missing values
+
+head(mort_expect_years) #print
+```
+
+### Select Data for 2000
+
+Filter all Africa data for 2000
+
+```{r}
+africadata2000<-africadata%>%
+  filter(year == 2000)
+
+#Double check code 
+str(africadata2000)
+summary(africadata2000)
+```
+
+# Visualize the data for 2000
+```{r}
+#Plots
+##Infant Mortality
+ggplot()+
+    geom_smooth(aes(x=infant_mortality, y=life_expectancy), color = "gray80", alpha = 0.1, data=africadata2000)+
+  geom_point(aes(x=infant_mortality, y=life_expectancy, color=region), data=africadata2000)+
+  labs(title = "Infant Mortality vs Life Expectancy", subtitle = "Year 2000") + 
+  xlab("Infant Mortality")+ ylab("Life Expectancy (Yrs)") + 
+  theme_bw() 
+
+##Population
+ggplot()+
+    geom_smooth(aes(x=log(population), y=life_expectancy), color = "gray80", alpha = 0.1, data=africadata2000)+
+  geom_point(aes(x=log(population), y=life_expectancy, color=region), data=africadata2000)+
+  labs(title="Population vs. Life Expectancy", subtitle="Year 2000") + 
+  xlab("Log Population")+ ylab("Life Expectancy (Yrs)") +
+  theme_bw()
+
+```
+
+## Quantify the Data
+
+**Fitting infant mortality as a predictor of life expectancy**
+
+```{r}
+fit1<- lm(life_expectancy ~ infant_mortality, data=africadata2000)
+summary(fit1)
+```
+
+We have evidence to support that infant mortality is a predictor of life expectancy. Based on the regression model, we can predict that for every unit increase in infant mortality, the average life expectancy decreases by 0.19 years (p=2.83e-8). The average predicted life expectancy with an infant mortality rate of 0 is 71.3 years.
+
+**Fitting population as a predictor of life expectancy**
+
+```{r}
+fit2<- lm(population ~ infant_mortality, data=africadata2000)
+summary(fit2)
+```
+
+Similar to what we saw in the plots, we do not have evidence to say that population is associated with infant mortality (p=0.66). 

@@ -136,3 +136,42 @@ summary(fit2)
 ```
 
 Similar to what we saw in the plots, we do not have evidence to say that population is associated with infant mortality (p=0.66). 
+
+**This section added by Annabella Hines**
+
+First, I wanted to look at the gapminder dataset as a whole specifically in the year 2000. I decided to create a boxplot to see the distributions of life expectancy for each continent.
+```{r}
+##create an object of the gapminder data for the year 2000
+continent<- gapminder %>% filter(year==2000)
+#A boxplot of the continent data viewing life expectancy by continent
+ggplot(data=continent, aes(x=continent, y=life_expectancy, color=continent))+geom_boxplot()+xlab("Continent")+ylab("Life Expectancy")
+```
+The life expectancy distributions of each continent look fairly comparable except for Africa which has a lower overall distribution, lower median, and more outliers.
+
+Next, I compared fertility to infant mortality grouped by continent for the year 2000 to see if there were any noticeable trends.
+
+```{r}
+##created a scatterplot of fertility and infant mortality color coded by continent
+ggplot(data=continent, aes(x=fertility, y=infant_mortality, color=continent))+geom_point()+ylab("Infant Mortality")+ xlab("Fertility")
+```
+There seems to be a positive correlation between fertility and infant mortality, with Europe having low values in each and Africa having the highest. 
+
+In the next section I wanted to explore how the life expectancy changed across the years for the different regions in Africa.
+```{r}
+#create an object out of africadata with year, life expectancy, and region
+africaregions<- africadata %>% select(year, life_expectancy, region)
+#create plot showing year vs. life expectancy color coded by region
+ggplot(data=africaregions, aes(x=year, y=life_expectancy, color=region))+geom_smooth()+ylab("Life Expectancy")+xlab("Year")
+```
+The plot shows a relatively positive correlation between year and life expectancy, so I wanted to run a fit to verify this observation.
+```{r}
+#Fit life expectanct against year for the africadata
+fit3<-lm(life_expectancy~year, data=africadata)
+summary(fit3)
+```
+According to the above data, year and life expectancy for the African countries are positively correlated at the 0.05 significance level.
+```{r}
+#Load broom and present lm output in a table
+library(broom)
+map_df(list(fit3), tidy)
+```

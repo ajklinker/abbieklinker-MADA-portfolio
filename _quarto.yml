@@ -12,10 +12,13 @@ website:
         menu:
           - text: "R Coding Exercise"
             href: ./coding_exercise.html
+          - text: "Data Analysis Exercise"
+            href: ./dataanalysis-exercise.html
           - text: "Visualization Exercise"
             href: ./visualization_exercise.html
           - text: "Tidy Tuesday Exercise"
             href: ./tidytuesday_exercise.html
+            
     right:
       - icon: github 
         href: URL-TO-THIS-REPOSITORY-HERE        

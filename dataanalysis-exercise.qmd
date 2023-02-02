@@ -6,11 +6,12 @@ editor: visual
 
 # About the Dataset
 
-This data set is the Behavioral Risk Factor Surveillance System (CDC BRFSS) Smoking and Tobacco Use from 1995 to 2010. It includes the rate by which each state (and US territory) exhibits different smoking habits. The rates are weighted to population characteristics to allow for comparison of different population sizes. It includes variables such as **"Smokes everyday"** **"Former Smoker"** **"Smokes some days"** and **"Never Smoked"**. I chose it because it was complete and relatively clean, as well as spanned over a large amount of years. This allowed for more than 53 rows which I saw in multiple other data sets. I wanted to use something a bit larger than only having one entry per state. 
+This data set is the Behavioral Risk Factor Surveillance System (CDC BRFSS) Smoking and Tobacco Use from 1995 to 2010. It includes the rate by which each state (and US territory) exhibits different smoking habits. The rates are weighted to population characteristics to allow for comparison of different population sizes. It includes variables such as **"Smokes everyday"** **"Former Smoker"** **"Smokes some days"** and **"Never Smoked"**. I chose it because it was complete and relatively clean, as well as spanned over a large amount of years. This allowed for more than 53 rows which I saw in multiple other data sets. I wanted to use something a bit larger than only having one entry per state.
 
 This data has been used to create [data visualizations also published on the CDC website](https://data.cdc.gov/Smoking-Tobacco-Use/2010-BRFSS-Smokes-Everyday-Map/exwk-rjkz) if you're interested in looking more into this data.
 
 # Processing the Data
+
 ## Reading in the Data
 
 ```{r include = FALSE}
@@ -23,14 +24,15 @@ library(knitr)
 **Tobacco Use - Smoking Data for 1995-2010**
 
 *A Note* I commented out the code chunk to only display the data table.
+
 ```{r echo=FALSE}
 tobacco<-read_csv("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/data/BRFSS_Tobacco_Use_Smoking_Data_1995_2010.csv")
 head(tobacco, n=10)
 ```
 
-We can see that there are two potential location variables, one which also includes latitude and longitude. I want to see if these locations are different, and separate the coordinates from the location. I'm also not sure what the coordinates mean -- they may be the midpoint of the state, the capital, the data collection center, etc. 
+We can see that there are two potential location variables, one which also includes latitude and longitude. I want to see if these locations are different, and separate the coordinates from the location. I'm also not sure what the coordinates mean -- they may be the midpoint of the state, the capital, the data collection center, etc.
 
-A quick Google search for the first set of coordinates in Oregon showed that they point to a potential state midpoint. This is confirmed by also looking at those for Indiana (my hometown!) and being placed in the heart of downtown Indianapolis in the center of the state and those for Georgia and being placed in Macon. 
+A quick Google search for the first set of coordinates in Oregon showed that they point to a potential state midpoint. This is confirmed by also looking at those for Indiana (my hometown!) and being placed in the heart of downtown Indianapolis in the center of the state and those for Georgia and being placed in Macon.
 
 We can also see 4 entries which are only coordinates for 2009-2010 Guam and Virgin Islands, so we need to make sure these get moved appropriately to the correct collumns when they are not structured the same way as the rest of the data.
 
@@ -76,13 +78,14 @@ tobacco_clean_F<-tobacco_clean2%>%
 
 ## Wide to Tall
 
-Next, since each rate is its own column, this may make it difficult to analyze and compare, so I want to change it to wide-to-tall format. 
+Next, since each rate is its own column, this may make it difficult to analyze and compare, so I want to change it to wide-to-tall format.
 
 ```{r}
 tobacco_tall<-gather(tobacco_clean_F, SmokeAmount, Rate, `Smoke everyday`:`Never smoked`)
 ```
 
 ## Data Table for Tobacco Use - Smoking Data for 1995-2010
+
 ```{r echo=FALSE}
 
 #The lat and long will look super long and clunky in a data table, so I want to round them to be pretty for presentation
@@ -104,11 +107,11 @@ save(tobacco_tall, tobacco, file = "C:/Users/abbie/Desktop/MADA2023/abbieklinker
 #load("data.RData") #reload as needed
 ```
 
-This will be our dataset for analysis! It allows us to group by the "SmokeAmount" variable while having a consistent variable of interest "Rate" among all categories. 
+This will be our dataset for analysis! It allows us to group by the "SmokeAmount" variable while having a consistent variable of interest "Rate" among all categories.
 
 # Data Analysis
 
-Since this data covers from 1995 to 2010, I want to first look at these variables over time. Below are plots for each category across all years. 
+Since this data covers from 1995 to 2010, I want to first look at these variables over time. Below are plots for each category across all years.
 
 ```{r}
 ggplot()+
@@ -117,9 +120,80 @@ ggplot()+
   theme_bw()
 ```
 
-This is a bit muddy of a plot, but we can see the general trends in rates between each category. It seems like among most states it is most common to not smoke. Former smoker and Smoking Everyday seem pretty comparable with smoking everyday on the decline. Finally smoking some days is the least common, but there does seem to be a very slight increase since 1995.  
+This is a bit muddy of a plot, but we can see the general trends in rates between each category. It seems like among most states it is most common to not smoke. Former smoker and Smoking Everyday seem pretty comparable with smoking everyday on the decline. Finally smoking some days is the least common, but there does seem to be a very slight increase since 1995.
 
-This is where my work ends, best of luck to Player 2. 
+This is where my work ends, best of luck to Player 2.
 
+## Kelly Hatfield's Section
+
+### Step 1: Load and Viewing the Tobacco R data
+
+```{r}
+
+ load("~/Documents/MADA 2023/abbieklinker-MADA-portfolio/AK_tobacco.RData")
+
+summary(tobacco_tall)
+```
+
+### Step 2: See how many years and states are represented.
+
+```{r}
+
+table(tobacco_tall$SmokeAmount)
+
+tobacco_tall_NS = subset(tobacco_tall, SmokeAmount == "Never smoked")
+
+table(tobacco_tall_NS$State)
+table(tobacco_tall_NS$Year)
+```
+
+### Step 3: Create a table of average rate of Never Smokers by year
+
+```{r}
+
+results <- aggregate(tobacco_tall_NS$Rate, list(tobacco_tall_NS$Year), FUN=mean)
+
+results <- tobacco_tall_NS %>%
+  group_by(Year)%>%
+  summarise_at(vars(Rate), list('Average'=mean))
+#
+library(knitr)
+
+
+knitr::kable(results, caption = "Percent of Non-Smokers by State", digits=2)
+#Change Never smoked variable name
+
+#
+
+
+```
+
+### Step 4: Create box plots and spaghetti plots showing rates of % Never smoked for states by year
+
+```{r}
+
+#Change Never smoked variable name
+
+
+
+ggplot(tobacco_tall_NS, aes(x=factor(Year), y=Rate)) + geom_boxplot() + ylim(0,100)
+
+ggplot(tobacco_tall_NS, aes(x=(Year), y=Rate, group=State)) + geom_line() + ylim(0,100)
+#
+
+
+```
+
+### Step 5: Print Top 5 States with highest percentage of never smokers in 2010
+
+
+```{r}
+
+
+sorted_data<- top_n(t_tall_NS_2000,5,Rate) %>% subset(select=c(State,Year,Rate))
+                      
+print(sorted_data)
+
+```
 
 

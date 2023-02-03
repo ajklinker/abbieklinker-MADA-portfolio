@@ -19,6 +19,7 @@ library(tidyverse)
 library(readr)
 library(ggplot2)
 library(knitr)
+library(here)
 ```
 
 **Tobacco Use - Smoking Data for 1995-2010**
@@ -101,10 +102,14 @@ rmarkdown::paged_table(tobacco_tall)
 ```
 
 ```{r, include=FALSE}
-#Export RDS File
-save(tobacco_tall, tobacco, file = "C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/data/AK_tobacco.RData") #raw and clean data if needed
+data_location <- here::here("data","AK_tobacco.RData")
 
-#load("data.RData") #reload as needed
+#Export RDS File
+#save(tobacco_tall, tobacco, file = data_location) 
+
+
+
+load(data_location) #reload as needed
 ```
 
 This will be our dataset for analysis! It allows us to group by the "SmokeAmount" variable while having a consistent variable of interest "Rate" among all categories.
@@ -121,6 +126,7 @@ ggplot()+
 ```
 
 This is a bit muddy of a plot, but we can see the general trends in rates between each category. It seems like among most states it is most common to not smoke. Former smoker and Smoking Everyday seem pretty comparable with smoking everyday on the decline. Finally smoking some days is the least common, but there does seem to be a very slight increase since 1995.
+<<<<<<< HEAD
 
 This is where my work ends, best of luck to Player 2.
 
@@ -196,4 +202,7 @@ print(sorted_data)
 
 ```
 
+=======
+>>>>>>> main
 
+This is where my work ends, best of luck to Player 2.

@@ -27,7 +27,7 @@ library(here)
 *A Note* I commented out the code chunk to only display the data table.
 
 ```{r echo=FALSE}
-tobacco<-read_csv("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/data/BRFSS_Tobacco_Use_Smoking_Data_1995_2010.csv")
+tobacco<-read_csv("data/BRFSS_Tobacco_Use_Smoking_Data_1995_2010.csv")
 head(tobacco, n=10)
 ```
 
@@ -126,17 +126,14 @@ ggplot()+
 ```
 
 This is a bit muddy of a plot, but we can see the general trends in rates between each category. It seems like among most states it is most common to not smoke. Former smoker and Smoking Everyday seem pretty comparable with smoking everyday on the decline. Finally smoking some days is the least common, but there does seem to be a very slight increase since 1995.
-<<<<<<< HEAD
 
 This is where my work ends, best of luck to Player 2.
 
 ## Kelly Hatfield's Section
 
-### Step 1: Load and Viewing the Tobacco R data
+### Step 1: Viewing the Tobacco R data
 
 ```{r}
-
- load("~/Documents/MADA 2023/abbieklinker-MADA-portfolio/AK_tobacco.RData")
 
 summary(tobacco_tall)
 ```
@@ -148,6 +145,7 @@ summary(tobacco_tall)
 table(tobacco_tall$SmokeAmount)
 
 tobacco_tall_NS = subset(tobacco_tall, SmokeAmount == "Never smoked")
+tobacco_tall_NS_2000=subset(tobacco_tall_NS, Year == 2000)
 
 table(tobacco_tall_NS$State)
 table(tobacco_tall_NS$Year)
@@ -192,17 +190,12 @@ ggplot(tobacco_tall_NS, aes(x=(Year), y=Rate, group=State)) + geom_line() + ylim
 
 ### Step 5: Print Top 5 States with highest percentage of never smokers in 2010
 
-
 ```{r}
+#
+library(dplyr)
 
-
-sorted_data<- top_n(t_tall_NS_2000,5,Rate) %>% subset(select=c(State,Year,Rate))
-                      
-print(sorted_data)
+sorted_data <- subset(tobacco_tall_NS_2000,select=c(State,Year,Rate))
+sorted_data2 <- top_n(sorted_data,5,Rate) 
+print(sorted_data2)
 
 ```
-
-=======
->>>>>>> main
-
-This is where my work ends, best of luck to Player 2.

@@ -337,8 +337,306 @@ dbl (5): Year, Smoke everyday, Smoke some days, Former smoker, Never smoked
 </div>
 <p>This is a bit muddy of a plot, but we can see the general trends in rates between each category. It seems like among most states it is most common to not smoke. Former smoker and Smoking Everyday seem pretty comparable with smoking everyday on the decline. Finally smoking some days is the least common, but there does seem to be a very slight increase since 1995.</p>
 <p>This is where my work ends, best of luck to Player 2.</p>
+<section id="kelly-hatfields-section" class="level2">
+<h2 class="anchored" data-anchor-id="kelly-hatfields-section">Kelly Hatfield’s Section</h2>
+<section id="step-1-viewing-the-tobacco-r-data" class="level3">
+<h3 class="anchored" data-anchor-id="step-1-viewing-the-tobacco-r-data">Step 1: Viewing the Tobacco R data</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(tobacco_tall)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Year         State                Lat             Long        
+ Min.   :1995   Length:3504        Min.   :13.40   Min.   :-157.86  
+ 1st Qu.:1999   Class :character   1st Qu.:35.47   1st Qu.:-106.13  
+ Median :2003   Mode  :character   Median :39.49   Median : -89.54  
+ Mean   :2003                      Mean   :39.60   Mean   : -92.63  
+ 3rd Qu.:2007                      3rd Qu.:43.63   3rd Qu.: -78.46  
+ Max.   :2010                      Max.   :64.85   Max.   : 144.78  
+                                   NA's   :240     NA's   :240      
+ SmokeAmount             Rate       
+ Length:3504        Min.   : 1.300  
+ Class :character   1st Qu.: 7.275  
+ Mode  :character   Median :21.000  
+                    Mean   :24.994  
+                    3rd Qu.:34.925  
+                    Max.   :83.700  
+                                    </code></pre>
+</div>
+</div>
+</section>
+<section id="step-2-see-how-many-years-and-states-are-represented." class="level3">
+<h3 class="anchored" data-anchor-id="step-2-see-how-many-years-and-states-are-represented.">Step 2: See how many years and states are represented.</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(tobacco_tall<span class="sc">$</span>SmokeAmount)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+  Former smoker    Never smoked  Smoke everyday Smoke some days 
+            876             876             876             876 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>tobacco_tall_NS <span class="ot">=</span> <span class="fu">subset</span>(tobacco_tall, SmokeAmount <span class="sc">==</span> <span class="st">"Never smoked"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>tobacco_tall_NS_2000<span class="ot">=</span><span class="fu">subset</span>(tobacco_tall_NS, Year <span class="sc">==</span> <span class="dv">2000</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(tobacco_tall_NS<span class="sc">$</span>State)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+                                 Alabama 
+                                      16 
+                                  Alaska 
+                                      16 
+                                 Arizona 
+                                      16 
+                                Arkansas 
+                                      16 
+                              California 
+                                      16 
+                                Colorado 
+                                      16 
+                             Connecticut 
+                                      16 
+                                Delaware 
+                                      16 
+                    District of Columbia 
+                                      15 
+                                 Florida 
+                                      16 
+                                 Georgia 
+                                      16 
+                                    Guam 
+                                       7 
+                                  Hawaii 
+                                      15 
+                                   Idaho 
+                                      16 
+                                Illinois 
+                                      16 
+                                 Indiana 
+                                      16 
+                                    Iowa 
+                                      16 
+                                  Kansas 
+                                      16 
+                                Kentucky 
+                                      16 
+                               Louisiana 
+                                      16 
+                                   Maine 
+                                      16 
+                                Maryland 
+                                      16 
+                           Massachusetts 
+                                      16 
+                                Michigan 
+                                      16 
+                               Minnesota 
+                                      16 
+                             Mississippi 
+                                      16 
+                                Missouri 
+                                      16 
+                                 Montana 
+                                      16 
+              Nationwide (States and DC) 
+                                      16 
+Nationwide (States, DC, and Territories) 
+                                      16 
+                                Nebraska 
+                                      16 
+                                  Nevada 
+                                      16 
+                           New Hampshire 
+                                      16 
+                              New Jersey 
+                                      16 
+                              New Mexico 
+                                      16 
+                                New York 
+                                      16 
+                          North Carolina 
+                                      16 
+                            North Dakota 
+                                      16 
+                                    Ohio 
+                                      16 
+                                Oklahoma 
+                                      16 
+                                  Oregon 
+                                      16 
+                            Pennsylvania 
+                                      16 
+                             Puerto Rico 
+                                      15 
+                            Rhode Island 
+                                      16 
+                          South Carolina 
+                                      16 
+                            South Dakota 
+                                      16 
+                               Tennessee 
+                                      16 
+                                   Texas 
+                                      16 
+                                    Utah 
+                                      14 
+                                 Vermont 
+                                      16 
+                          Virgin Islands 
+                                      10 
+                                Virginia 
+                                      16 
+                              Washington 
+                                      16 
+                           West Virginia 
+                                      16 
+                               Wisconsin 
+                                      16 
+                                 Wyoming 
+                                      16 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(tobacco_tall_NS<span class="sc">$</span>Year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+1995 1996 1997 1998 1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 
+  51   53   54   54   54   54   56   56   56   54   55   55   56   56   56   56 </code></pre>
+</div>
+</div>
+</section>
+<section id="step-3-create-a-table-of-average-rate-of-never-smokers-by-year" class="level3">
+<h3 class="anchored" data-anchor-id="step-3-create-a-table-of-average-rate-of-never-smokers-by-year">Step 3: Create a table of average rate of Never Smokers by year</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">aggregate</span>(tobacco_tall_NS<span class="sc">$</span>Rate, <span class="fu">list</span>(tobacco_tall_NS<span class="sc">$</span>Year), <span class="at">FUN=</span>mean)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> tobacco_tall_NS <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year)<span class="sc">%&gt;%</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise_at</span>(<span class="fu">vars</span>(Rate), <span class="fu">list</span>(<span class="st">'Average'</span><span class="ot">=</span>mean))</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(results, <span class="at">caption =</span> <span class="st">"Percent of Non-Smokers by State"</span>, <span class="at">digits=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<caption>Percent of Non-Smokers by State</caption>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Year</th>
+<th style="text-align: right;">Average</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1995</td>
+<td style="text-align: right;">52.08</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1996</td>
+<td style="text-align: right;">52.37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1997</td>
+<td style="text-align: right;">52.98</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">52.84</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">53.39</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">52.93</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">52.67</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">52.69</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">53.04</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">55.55</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">54.87</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2006</td>
+<td style="text-align: right;">55.52</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">55.83</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2008</td>
+<td style="text-align: right;">56.54</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">56.89</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">57.54</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change Never smoked variable name</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-4-create-box-plots-and-spaghetti-plots-showing-rates-of-never-smoked-for-states-by-year" class="level3">
+<h3 class="anchored" data-anchor-id="step-4-create-box-plots-and-spaghetti-plots-showing-rates-of-never-smoked-for-states-by-year">Step 4: Create box plots and spaghetti plots showing rates of % Never smoked for states by year</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Change Never smoked variable name</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tobacco_tall_NS, <span class="fu">aes</span>(<span class="at">x=</span><span class="fu">factor</span>(Year), <span class="at">y=</span>Rate)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="dataanalysis-exercise_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(tobacco_tall_NS, <span class="fu">aes</span>(<span class="at">x=</span>(Year), <span class="at">y=</span>Rate, <span class="at">group=</span>State)) <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="dataanalysis-exercise_files/figure-html/unnamed-chunk-13-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-5-print-top-5-states-with-highest-percentage-of-never-smokers-in-2010" class="level3">
+<h3 class="anchored" data-anchor-id="step-5-print-top-5-states-with-highest-percentage-of-never-smokers-in-2010">Step 5: Print Top 5 States with highest percentage of never smokers in 2010</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>sorted_data <span class="ot">&lt;-</span> <span class="fu">subset</span>(tobacco_tall_NS_2000,<span class="at">select=</span><span class="fu">c</span>(State,Year,Rate))</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>sorted_data2 <span class="ot">&lt;-</span> <span class="fu">top_n</span>(sorted_data,<span class="dv">5</span>,Rate) </span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(sorted_data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  State                 Year  Rate
+  &lt;chr&gt;                &lt;dbl&gt; &lt;dbl&gt;
+1 Arizona               2000  59.7
+2 Minnesota             2000  57.1
+3 Utah                  2000  68.8
+4 District of Columbia  2000  57.1
+5 Oklahoma              2000  57.4
+6 Puerto Rico           2000  71.6</code></pre>
+</div>
+</div>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->

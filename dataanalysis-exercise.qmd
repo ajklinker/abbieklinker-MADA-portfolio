@@ -27,7 +27,7 @@ library(here)
 *A Note* I commented out the code chunk to only display the data table.
 
 ```{r echo=FALSE}
-tobacco<-read_csv("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/data/BRFSS_Tobacco_Use_Smoking_Data_1995_2010.csv")
+tobacco<-read_csv("data/BRFSS_Tobacco_Use_Smoking_Data_1995_2010.csv")
 head(tobacco, n=10)
 ```
 
@@ -128,3 +128,74 @@ ggplot()+
 This is a bit muddy of a plot, but we can see the general trends in rates between each category. It seems like among most states it is most common to not smoke. Former smoker and Smoking Everyday seem pretty comparable with smoking everyday on the decline. Finally smoking some days is the least common, but there does seem to be a very slight increase since 1995.
 
 This is where my work ends, best of luck to Player 2.
+
+## Kelly Hatfield's Section
+
+### Step 1: Viewing the Tobacco R data
+
+```{r}
+
+summary(tobacco_tall)
+```
+
+### Step 2: See how many years and states are represented.
+
+```{r}
+
+table(tobacco_tall$SmokeAmount)
+
+tobacco_tall_NS = subset(tobacco_tall, SmokeAmount == "Never smoked")
+tobacco_tall_NS_2000=subset(tobacco_tall_NS, Year == 2000)
+
+table(tobacco_tall_NS$State)
+table(tobacco_tall_NS$Year)
+```
+
+### Step 3: Create a table of average rate of Never Smokers by year
+
+```{r}
+
+results <- aggregate(tobacco_tall_NS$Rate, list(tobacco_tall_NS$Year), FUN=mean)
+
+results <- tobacco_tall_NS %>%
+  group_by(Year)%>%
+  summarise_at(vars(Rate), list('Average'=mean))
+#
+library(knitr)
+
+
+knitr::kable(results, caption = "Percent of Non-Smokers by State", digits=2)
+#Change Never smoked variable name
+
+#
+
+
+```
+
+### Step 4: Create box plots and spaghetti plots showing rates of % Never smoked for states by year
+
+```{r}
+
+#Change Never smoked variable name
+
+
+
+ggplot(tobacco_tall_NS, aes(x=factor(Year), y=Rate)) + geom_boxplot() + ylim(0,100)
+
+ggplot(tobacco_tall_NS, aes(x=(Year), y=Rate, group=State)) + geom_line() + ylim(0,100)
+#
+
+
+```
+
+### Step 5: Print Top 5 States with highest percentage of never smokers in 2010
+
+```{r}
+#
+library(dplyr)
+
+sorted_data <- subset(tobacco_tall_NS_2000,select=c(State,Year,Rate))
+sorted_data2 <- top_n(sorted_data,5,Rate) 
+print(sorted_data2)
+
+```

@@ -25,7 +25,7 @@ library(anytime)
 ```
 
 ```{r, warning=FALSE}
-elo<-read_csv("./data/WNBA-stats/wnba-team-elo-ratings.csv")
+elo<-read_csv("C:/users/abbie/Desktop/MADA2023/WNBA-stats/wnba-team-elo-ratings.csv")
 glimpse(elo)
 
 #get date to date form

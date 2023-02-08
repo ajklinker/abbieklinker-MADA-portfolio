@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>My Data Analysis Portfolio - Visualization Exercise</title>
+<title>My Data Analysis Portfolio - Data Visualization Exercise - WNBA GOAT</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -129,7 +192,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Visualization Exercise</h1>
+<h1 class="title">Data Visualization Exercise - WNBA GOAT</h1>
 </div>
 
 
@@ -144,9 +207,125 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Placeholder file for the future visualization exercise.</p>
+<section id="about-my-figure" class="level2">
+<h2 class="anchored" data-anchor-id="about-my-figure">About My Figure</h2>
+<p><img src="data/WNBA-stats/Screenshot 2023-02-07 203700.png" class="img-fluid" width="576"></p>
+<p>This is the image I’m trying to replicate. I found this in an article at FiveThirtyEight that <a href="https://fivethirtyeight.com/features/its-time-to-give-basketballs-other-goat-her-due/">describes Cynthia Cooper-Dykes’s domination of the court in the 1990-2000s</a>. She played on the Houston Comets and led them to being one of the best WNBA teams every by composite ratings. However, an employee at FiveThirtyEight created their own measure for team performance called Elo. The ratings change after every game based on the winner’s pregame win probability, with more unexpected wins resulting in more points shifting from the loser’s rating to the winner’s. The author used this system to support their argument for the Houston Comets’ domination, attributed to Cooper-Dyke.</p>
+<p>The <a href="https://github.com/ajklinker/WNBA-stats">dataset</a>supplied has four different Elo ratings for each game played between 1997 and 2019 season. Two scores are the away team and two are the home team. Likewise, two are their respective rankings before the game while the other two are the respective rankings after the game.</p>
+<p>The graph nor the article describe if the pre- or post-Elo score is used. However, it can be assumed that one game’s pre-score is the previous game’s post score, so I will use the post score to track Elo rankings over time.</p>
+</section>
+<section id="read-in-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="read-in-the-data">Read in the Data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>elo<span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="st">"./data/WNBA-stats/wnba-team-elo-ratings.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 10488 Columns: 16
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (5): date, team1, team2, name1, name2
+dbl (11): season, neutral, playoff, score1, score2, elo1_pre, elo2_pre, elo1...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(elo)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10,488
+Columns: 16
+$ season    &lt;dbl&gt; 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, …
+$ date      &lt;chr&gt; "10/10/2019", "10/10/2019", "10/8/2019", "10/8/2019", "10/6/…
+$ team1     &lt;chr&gt; "WAS", "CON", "WAS", "CON", "WAS", "CON", "WAS", "CON", "WAS…
+$ team2     &lt;chr&gt; "CON", "WAS", "CON", "WAS", "CON", "WAS", "CON", "WAS", "CON…
+$ name1     &lt;chr&gt; "Washington Mystics", "Connecticut Sun", "Washington Mystics…
+$ name2     &lt;chr&gt; "Connecticut Sun", "Washington Mystics", "Connecticut Sun", …
+$ neutral   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ playoff   &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ score1    &lt;dbl&gt; 89, 78, 86, 90, 94, 81, 87, 99, 95, 86, 94, 90, 75, 78, 92, …
+$ score2    &lt;dbl&gt; 78, 89, 90, 86, 81, 94, 99, 87, 86, 95, 90, 94, 92, 56, 75, …
+$ elo1_pre  &lt;dbl&gt; 1684, 1634, 1693, 1626, 1671, 1648, 1700, 1618, 1694, 1624, …
+$ elo2_pre  &lt;dbl&gt; 1634, 1684, 1626, 1693, 1648, 1671, 1618, 1700, 1624, 1694, …
+$ elo1_post &lt;dbl&gt; 1692, 1627, 1684, 1634, 1693, 1626, 1671, 1648, 1700, 1618, …
+$ elo2_post &lt;dbl&gt; 1627, 1692, 1634, 1684, 1626, 1693, 1648, 1671, 1618, 1700, …
+$ prob1     &lt;dbl&gt; 0.718, 0.282, 0.476, 0.524, 0.399, 0.601, 0.763, 0.237, 0.74…
+$ is_home1  &lt;dbl&gt; 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, …</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get date to date form</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>elo<span class="sc">$</span>date<span class="ot">&lt;-</span><span class="fu">anydate</span>(elo<span class="sc">$</span>date) <span class="co">#different length character strings weren't compatable with lubridate </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#filter for HOU</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>elo_hou_raw<span class="ot">&lt;-</span>elo<span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(team1 <span class="sc">==</span> <span class="st">"HOU"</span> <span class="sc">|</span> team2 <span class="sc">==</span> <span class="st">"HOU"</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>         <span class="sc">!</span><span class="fu">duplicated</span>(date),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         date <span class="sc">&lt;</span> <span class="st">"2001-01-01"</span>)<span class="sc">%&gt;%</span>            <span class="co">#Sometimes there's a duplicate entry for the same game where the only difference is team1 and team2 are switched</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(date)<span class="sc">%&gt;%</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">game =</span> <span class="fu">row_number</span>())             <span class="co">#Count the game number since that is the x axis for the graph</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(elo_hou_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 138
+Columns: 17
+$ season    &lt;dbl&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, …
+$ date      &lt;date&gt; 1997-06-21, 1997-06-24, 1997-06-26, 1997-06-28, 1997-06-30,…
+$ team1     &lt;chr&gt; "HOU", "HOU", "NYL", "HOU", "HOU", "NYL", "NYL", "PHO", "HOU…
+$ team2     &lt;chr&gt; "CLE", "PHO", "HOU", "LVA", "LAS", "HOU", "HOU", "HOU", "SAC…
+$ name1     &lt;chr&gt; "Houston Comets", "Houston Comets", "New York Liberty", "Hou…
+$ name2     &lt;chr&gt; "Cleveland Rockers", "Phoenix Mercury", "Houston Comets", "U…
+$ neutral   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ playoff   &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+$ score1    &lt;dbl&gt; 76, 72, 62, 76, 71, 72, 65, 69, 89, 82, 77, 86, 64, 81, 63, …
+$ score2    &lt;dbl&gt; 56, 55, 60, 58, 66, 67, 58, 64, 61, 60, 69, 76, 73, 57, 74, …
+$ elo1_pre  &lt;dbl&gt; 1500, 1530, 1539, 1535, 1558, 1556, 1564, 1554, 1547, 1542, …
+$ elo2_pre  &lt;dbl&gt; 1500, 1515, 1544, 1479, 1498, 1564, 1556, 1554, 1485, 1466, …
+$ elo1_post &lt;dbl&gt; 1530, 1544, 1548, 1558, 1564, 1564, 1579, 1561, 1563, 1567, …
+$ elo2_post &lt;dbl&gt; 1470, 1501, 1535, 1456, 1492, 1556, 1541, 1547, 1469, 1441, …
+$ prob1     &lt;dbl&gt; 0.387, 0.634, 0.381, 0.466, 0.692, 0.603, 0.397, 0.614, 0.69…
+$ is_home1  &lt;dbl&gt; 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, …
+$ game      &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1…</code></pre>
+</div>
+</div>
+<p>Now we need to separate and rejoin the dataframes based on if HOU is team1 or team2 so we have a cohesive HOU dataframe regardless of home or away status.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Separate</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>hou1<span class="ot">&lt;-</span>elo_hou_raw<span class="sc">%&gt;%</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(team1 <span class="sc">==</span> <span class="st">"HOU"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(season, date, team1, name1, elo1_post, game)<span class="sc">%&gt;%</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">team =</span> team1, <span class="at">name=</span>name1, <span class="at">elo_post =</span> elo1_post)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>hou2<span class="ot">&lt;-</span>elo_hou_raw<span class="sc">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(team2 <span class="sc">==</span> <span class="st">"HOU"</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(season, date, team2, name2, elo2_post, game)<span class="sc">%&gt;%</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">team =</span> team2, <span class="at">name=</span>name2, <span class="at">elo_post =</span> elo2_post)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Rejoin</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>elo_hou_clean<span class="ot">&lt;-</span><span class="fu">rbind</span>(hou1, hou2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="making-the-plots" class="level2">
+<h2 class="anchored" data-anchor-id="making-the-plots">Making the Plots</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">x=</span>game, <span class="at">y=</span>elo_post), <span class="at">data=</span>elo_hou_clean, <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linewidth =</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"gray30"</span>, <span class="at">family =</span>  <span class="st">"mono"</span>, <span class="at">size =</span> <span class="dv">12</span>), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"gray30"</span>, <span class="at">family =</span>  <span class="st">"mono"</span>, <span class="at">size =</span> <span class="dv">12</span>), </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">hjust =</span> <span class="sc">-</span>.<span class="dv">15</span>, <span class="at">size =</span> <span class="dv">15</span>), </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="sc">-</span>.<span class="dv">15</span>, <span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">"bold"</span>, <span class="at">family =</span> <span class="st">"sans"</span>),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.y =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">linewidth=</span>.<span class="dv">5</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>),</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.line.x =</span> <span class="fu">element_line</span>(<span class="at">colour =</span> <span class="st">"gray80"</span>,<span class="at">linewidth=</span>.<span class="dv">5</span>, <span class="at">linetype =</span> <span class="st">"solid"</span>), </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">'gray95'</span>), <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">'gray95'</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="st">"gray80"</span>),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"How Houston became the best WNBA team ever"</span>, <span class="at">subtitle =</span> <span class="st">"Game-by-game Elo rating for the Houston Comets, 1997-2000"</span>)<span class="sc">+</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">name=</span><span class="st">"Game Number"</span>, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">140</span>, <span class="dv">20</span>))<span class="sc">+</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1500</span>, <span class="dv">1800</span>, <span class="dv">100</span>), <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">1830</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="visualization_exercise_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Throughout this process, the biggest trouble I had was finding the correct fonts to match those of the articles. I referenced the <a href="http://www.cookbook-r.com/Graphs/Fonts/">R Cookbook</a> a good bit during this step. I tried several fonts but could not find the exact one used by the authors - it may have been uploaded independently of the pre-loaded options. Mine are not off by a lot, but enough to notice. This exercise also allowed me to experiment more with the theme function and the different elements of the graph. In the past I have used many of these individually, but very rarely nearly all of the options. It makes my code seem a bit overwhelming, but the functionality is super nice!</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

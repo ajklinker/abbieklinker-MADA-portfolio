@@ -1,8 +1,86 @@
 ---
-title: "Visualization Exercise"
-output:
-  html_document:
-    toc: FALSE
+title: "Data Visualization Exercise - WNBA GOAT"
+format: html
+editor: visual
 ---
 
-Placeholder file for the future visualization exercise.
+## About My Figure
+
+![](data/WNBA-stats/Screenshot%202023-02-07%20203700.png){width="576"}
+
+This is the image I'm trying to replicate. I found this in an article at FiveThirtyEight that [describes Cynthia Cooper-Dykes's domination of the court in the 1990-2000s](https://fivethirtyeight.com/features/its-time-to-give-basketballs-other-goat-her-due/). She played on the Houston Comets and led them to being one of the best WNBA teams every by composite ratings. However, an employee at FiveThirtyEight created their own measure for team performance called Elo. The ratings change after every game based on the winner's pregame win probability, with more unexpected wins resulting in more points shifting from the loser's rating to the winner's. The author used this system to support their argument for the Houston Comets' domination, attributed to Cooper-Dyke.
+
+The [dataset](https://github.com/ajklinker/WNBA-stats)supplied has four different Elo ratings for each game played between 1997 and 2019 season. Two scores are the away team and two are the home team. Likewise, two are their respective rankings before the game while the other two are the respective rankings after the game.
+
+The graph nor the article describe if the pre- or post-Elo score is used. However, it can be assumed that one game's pre-score is the previous game's post score, so I will use the post score to track Elo rankings over time.
+
+## Read in the Data
+
+```{r, include=FALSE}
+library(tidyverse)
+library(readr)
+library(ggplot2)
+library(lubridate)
+library(anytime)
+```
+
+```{r, warning=FALSE}
+elo<-read_csv("./data/WNBA-stats/wnba-team-elo-ratings.csv")
+glimpse(elo)
+
+#get date to date form
+elo$date<-anydate(elo$date) #different length character strings weren't compatable with lubridate 
+
+#filter for HOU
+elo_hou_raw<-elo%>%
+  filter(team1 == "HOU" | team2 == "HOU",
+         !duplicated(date),
+         date < "2001-01-01")%>%            #Sometimes there's a duplicate entry for the same game where the only difference is team1 and team2 are switched
+  arrange(date)%>%
+  mutate(game = row_number())             #Count the game number since that is the x axis for the graph
+glimpse(elo_hou_raw)
+
+```
+
+Now we need to separate and rejoin the dataframes based on if HOU is team1 or team2 so we have a cohesive HOU dataframe regardless of home or away status.
+
+```{r}
+#Separate
+hou1<-elo_hou_raw%>%
+  filter(team1 == "HOU")%>%
+  select(season, date, team1, name1, elo1_post, game)%>%
+  rename(team = team1, name=name1, elo_post = elo1_post)
+
+hou2<-elo_hou_raw%>%
+  filter(team2 == "HOU")%>%
+  select(season, date, team2, name2, elo2_post, game)%>%
+  rename(team = team2, name=name2, elo_post = elo2_post)
+
+#Rejoin
+elo_hou_clean<-rbind(hou1, hou2)
+
+```
+
+## Making the Plots
+
+```{r, out.width="576px"}
+ggplot()+
+  geom_line(aes(x=game, y=elo_post), data=elo_hou_clean, color = "red", linewidth =1)+
+  theme(axis.title.y = element_blank(), 
+        axis.text.y = element_text(color = "gray30", family =  "mono", size = 12), 
+        axis.text.x = element_text(color = "gray30", family =  "mono", size = 12), 
+        plot.title = element_text(face = "bold", hjust = -.15, size = 15), 
+        plot.subtitle = element_text(hjust = -.15, size = 12),
+        axis.title.x = element_text(face="bold", family = "sans"),
+        axis.line.y = element_line(colour = "black", linewidth=.5, linetype = "solid"),
+        axis.line.x = element_line(colour = "gray80",linewidth=.5, linetype = "solid"), 
+        plot.background = element_rect(fill = 'gray95'), panel.background = element_rect(fill = 'gray95'),
+        panel.grid.major = element_line("gray80"),
+        panel.grid.minor = element_blank())+
+  labs(title = "How Houston became the best WNBA team ever", subtitle = "Game-by-game Elo rating for the Houston Comets, 1997-2000")+
+  scale_x_continuous(name="Game Number", breaks = seq(0, 140, 20))+
+  scale_y_continuous(breaks = seq(1500, 1800, 100), limits = c(1500, 1830))
+
+```
+
+Throughout this process, the biggest trouble I had was finding the correct fonts to match those of the articles. I referenced the [R Cookbook](http://www.cookbook-r.com/Graphs/Fonts/) a good bit during this step. I tried several fonts but could not find the exact one used by the authors - it may have been uploaded independently of the pre-loaded options. Mine are not off by a lot, but enough to notice. This exercise also allowed me to experiment more with the theme function and the different elements of the graph. In the past I have used many of these individually, but very rarely nearly all of the options. It makes my code seem a bit overwhelming, but the functionality is super nice!

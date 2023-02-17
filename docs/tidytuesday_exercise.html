@@ -20,6 +20,69 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1.6em;
   vertical-align: middle;
 }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 
@@ -144,9 +207,275 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Placeholder file for the future Tidy Tuesday exercise.</p>
+<p>This is my first Tidy Tuesday exercise! I feel like this is such a cool community to be a part of, and I’m excited to get into it.</p>
+<p>First thing’s first, let’s load in the data.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 1,155
+Columns: 12
+$ Movie.Name        &lt;chr&gt; "Harold and Maude", "Venus", "The Quiet American", "…
+$ Release.Year      &lt;int&gt; 1971, 2006, 2002, 1998, 2010, 1992, 2009, 1999, 1992…
+$ Director          &lt;chr&gt; "Hal Ashby", "Roger Michell", "Phillip Noyce", "Joel…
+$ Age.Difference    &lt;int&gt; 52, 50, 49, 45, 43, 42, 40, 39, 38, 38, 36, 36, 35, …
+$ Actor.1.Name      &lt;chr&gt; "Bud Cort", "Peter O'Toole", "Michael Caine", "David…
+$ Actor.1.Gender    &lt;chr&gt; "man", "man", "man", "man", "man", "man", "man", "ma…
+$ Actor.1.Birthdate &lt;chr&gt; "1948-03-29", "1932-08-02", "1933-03-14", "1930-09-1…
+$ Actor.1.Age       &lt;int&gt; 23, 74, 69, 68, 81, 59, 62, 69, 57, 77, 59, 56, 65, …
+$ Actor.2.Name      &lt;chr&gt; "Ruth Gordon", "Jodie Whittaker", "Do Thi Hai Yen", …
+$ Actor.2.Gender    &lt;chr&gt; "woman", "woman", "woman", "woman", "man", "woman", …
+$ Actor.2.Birthdate &lt;chr&gt; "1896-10-30", "1982-06-03", "1982-10-01", "1975-11-0…
+$ Actor.2.Age       &lt;int&gt; 75, 24, 20, 23, 38, 17, 22, 30, 19, 39, 23, 20, 30, …</code></pre>
+</div>
+</div>
+<section id="data-exploration" class="level2">
+<h2 class="anchored" data-anchor-id="data-exploration">Data Exploration</h2>
+<p>Alrighty, off the bat it looks like the first actor is usually a guy while the second one is a mix of men and women, but I want to check this out.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(movies<span class="sc">$</span>Actor.<span class="fl">1.</span>Gender) <span class="co">#There's both! How many of each?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "man"   "woman"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(movies<span class="sc">$</span>Actor.<span class="fl">1.</span>Gender <span class="sc">==</span> <span class="st">"man"</span>) <span class="co">#1139</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1139</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(movies<span class="sc">$</span>Actor.<span class="fl">1.</span>Gender <span class="sc">==</span> <span class="st">"woman"</span>) <span class="co">#16</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 16</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(movies<span class="sc">$</span>Actor.<span class="fl">2.</span>Gender) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "woman" "man"  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(movies<span class="sc">$</span>Actor.<span class="fl">2.</span>Gender <span class="sc">==</span> <span class="st">"man"</span>) <span class="co">#17</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 17</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(movies<span class="sc">$</span>Actor.<span class="fl">2.</span>Gender <span class="sc">==</span> <span class="st">"woman"</span>) <span class="co">#1138</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1138</code></pre>
+</div>
+</div>
+<p>Do we have any overlap in the few where men/women are flipped?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>movies <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Actor.<span class="fl">1.</span>Name <span class="sc">%in%</span> Actor.<span class="fl">2.</span>Name)<span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(Actor.<span class="fl">1.</span>Name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Actor.1.Name
+1        Julianne Moore
+2         Ralph Fiennes
+3          Daniel Craig
+4        Cate Blanchett
+5          James Franco
+6            Matt Damon
+7         Ewan McGregor
+8         Matthew Goode
+9           Léa Seydoux
+10        Russell Brand
+11      Charlize Theron
+12         Rebecca Hall
+13           Taye Diggs
+14          Lena Headey
+15         Heath Ledger
+16 Kristin Scott Thomas
+17       Annette Bening
+18    Timothée Chalamet
+19       Nicholas Hoult</code></pre>
+</div>
+</div>
+<p>Ok so we have 19 actors that are in both Actor.1 and Actor.2. Right now we might not need to adjust for this, but it’s good to know for the future.</p>
+<p>So there seems to be a flip-flop of leading men/ladies, and about 1 of each gender per film. So, the order of Actor 1 and Actor 2 it’s not exclusively men and women, is Actor 1 the older one?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>movies<span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">act1.agediff =</span> Actor.<span class="fl">1.</span>Age <span class="sc">-</span> Actor.<span class="fl">2.</span>Age)<span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(act1.agediff <span class="sc">&lt;</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  act1.agediff &lt; 0   n
+1            FALSE 969
+2             TRUE 186</code></pre>
+</div>
+</div>
+<p>We have 186 instances where Actor 2 is older than Actor 1. It seems like for this dataset is a bit arbitrary in terms of who is listed 1st and 2nd - unless it’s by whoever is paid most which is information we don’t have here.</p>
+<p>Welp, we’ll figure out what to do with this later. Until I know what I’m doing with the data I won’t mess with it. To continue data exploration, I want to see how many unique actors there are across the board.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(movies<span class="sc">$</span>Actor.<span class="fl">1.</span>Name) <span class="co">#491</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(movies<span class="sc">$</span>Actor.<span class="fl">2.</span>Name) <span class="co">#559</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Cool, so we have a wide range of different actors! We’re still going to have some duplicates, so who are the most common/popular actors across both?</p>
+<div class="cell" data-out.lines="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(movies<span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(movies<span class="sc">$</span>Actor.<span class="fl">1.</span>Name)<span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)), <span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   movies$Actor.1.Name  n
+1         Keanu Reeves 27
+2         Adam Sandler 20
+3    Leonardo DiCaprio 17
+4          Roger Moore 17
+5         Sean Connery 17
+6       Pierce Brosnan 14
+7        Harrison Ford 13
+8          Johnny Depp 12
+9         Richard Gere 11
+10          Tom Cruise 11</code></pre>
+</div>
+</div>
+<div class="cell" data-out.lines="10">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(movies<span class="sc">%&gt;%</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(movies<span class="sc">$</span>Actor.<span class="fl">2.</span>Name)<span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)), <span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   movies$Actor.2.Name  n
+1      Keira Knightley 14
+2    Reese Witherspoon 13
+3   Scarlett Johansson 13
+4           Emma Stone 12
+5        Julia Roberts 12
+6      Renee Zellweger 12
+7     Jennifer Aniston 11
+8    Jennifer Lawrence 10
+9       Julianne Moore 10
+10        Cameron Diaz  9</code></pre>
+</div>
+</div>
+<p>We have the incredible Keanu Reeves and Keria Knightly leading the actors with 27 and 14 movies each, respectively.</p>
+</section>
+<section id="analysis" class="level2">
+<h2 class="anchored" data-anchor-id="analysis">Analysis</h2>
+<p>Alright, now that we’ve explored the data a bit, let’s get into the juicy stuff – looking at these age differences.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Actor.<span class="fl">1.</span>Age, <span class="at">y=</span>Actor.<span class="fl">2.</span>Age), <span class="at">data=</span>movies)<span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="fu">aes</span>(<span class="at">x=</span>Actor.<span class="fl">1.</span>Age, <span class="at">y=</span>Actor.<span class="fl">2.</span>Age), <span class="at">data=</span>movies)<span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using method = 'gam' and formula = 'y ~ s(x, bs = "cs")'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="tidytuesday_exercise_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The good news is it seems relatively steady in terms of age gaps between the two actors. Does this age difference change over time?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x=</span>Release.Year, <span class="at">y=</span>Age.Difference), <span class="at">data=</span>movies)<span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="tidytuesday_exercise_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It seems pretty hard to see trends since we have such a large number of movies released more recently. Let’s see how else we can visualize this.</p>
+<p>Since we have such a long time-frame, I’m going to create a dummy variable for decade of release.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>movies.decade<span class="ot">&lt;-</span>movies<span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Decade =</span> <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1930</span><span class="sc">:</span><span class="dv">1939</span>), <span class="st">"1930"</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1940</span><span class="sc">:</span><span class="dv">1949</span>), <span class="st">"1940"</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1950</span><span class="sc">:</span><span class="dv">1959</span>), <span class="st">"1950"</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                                       <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1960</span><span class="sc">:</span><span class="dv">1969</span>), <span class="st">"1960"</span>,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>                                              <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1970</span><span class="sc">:</span><span class="dv">1979</span>), <span class="st">"1970"</span>,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>                                                     <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1980</span><span class="sc">:</span><span class="dv">1989</span>), <span class="st">"1980"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>                                                            <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1990</span><span class="sc">:</span><span class="dv">1999</span>), <span class="st">"1990"</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>                                                                   <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2009</span>), <span class="st">"2000"</span>,</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>                                                                          <span class="fu">ifelse</span>(Release.Year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">2010</span><span class="sc">:</span><span class="dv">2019</span>), <span class="st">"2010"</span>, <span class="st">"2020"</span>))))))))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next, I want to plot the Age Differences relative to Decade and see if we can notice any trends when the scales are standardized to a proportion to try and mitigate the influx of movie production in the recent years.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>Age.Difference, <span class="at">fill=</span>Decade), <span class="at">data=</span>movies.decade, <span class="at">position =</span> <span class="st">"fill"</span>, <span class="at">width =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="tidytuesday_exercise_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>A barchart such as this helps us see which decades have certain age gaps, and using a proportional approach helps mitigate the large number of more recent movies. However, we still run into the problem where the number of movies created in each decade influences how we read the chart. For example, those movies made in the 2020s don’t seem like a large impact although these recent movies have over 20 years age differences, and those from the 1930s are barely visible.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>movies.age<span class="ot">&lt;-</span>movies.decade<span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">age.diff =</span> <span class="fu">ifelse</span>(Age.Difference <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>), <span class="st">"&lt;10"</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">ifelse</span>(Age.Difference <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">10</span><span class="sc">:</span><span class="dv">19</span>), <span class="st">"10-20"</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>                                    <span class="fu">ifelse</span>(Age.Difference <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">20</span><span class="sc">:</span><span class="dv">29</span>), <span class="st">"20+"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                                            <span class="fu">ifelse</span>(Age.Difference <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">30</span><span class="sc">:</span><span class="dv">39</span>), <span class="st">"30+"</span>,</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>                                                    <span class="fu">ifelse</span>(Age.Difference <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">40</span><span class="sc">:</span><span class="dv">49</span>), <span class="st">"40+"</span>, <span class="st">"50+"</span>))))))</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>Decade, <span class="at">fill=</span>age.diff), <span class="at">data=</span>movies.age, <span class="at">position  =</span> <span class="fu">position_fill</span>(<span class="at">reverse =</span> <span class="cn">TRUE</span>))<span class="sc">+</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="tidytuesday_exercise_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Switching our (in)dependent variables helped us see how the movies in each trended towards different age differences. Shockingly, 2020s had some drastic age differences of 20+ years. Maybe not shockingly, overall, the older movies tended to have more age-gap couples, specifically the 1940s and 50s with most of their respective movies having couples that had over a 20 year age gap.</p>
+<p>I’m curious to see if any specific directors are guilty of leading these movies, or if it’s an industry-wide concern. Because of the variation by decade and the limited longevity of people’s careers, I’m going to keep the decade consideration as a grouping with these directors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>movies.direct<span class="ot">&lt;-</span>movies.decade<span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Director, Decade)<span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean.diff =</span> <span class="fu">mean</span>(Age.Difference))<span class="sc">%&gt;%</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(mean.diff)<span class="sc">%&gt;%</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(mean.diff))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'Director'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(movies.direct, <span class="at">n=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+# Groups:   Director [10]
+   Director       mean.diff     n
+   &lt;chr&gt;              &lt;dbl&gt; &lt;int&gt;
+ 1 Hal Ashby           52       1
+ 2 Katt Shea           42       1
+ 3 Roger Michell       41.5     1
+ 4 Jon Amiel           39       1
+ 5 Irving Pichel       36       1
+ 6 Jonathan Lynn       34       1
+ 7 Sofia Coppola       34       1
+ 8 Daniel Petrie       33       1
+ 9 Jean Negulesco      32       1
+10 Phillip Noyce       31.5     1</code></pre>
+</div>
+</div>
+<p>So, I was able to ultimately do this by Director and by decade but not both. There’s definitely a way to do it (and probably very easily), but if I’m honest I’m very tired and would rather do it separately and call it a day.</p>
+<p>Anyways, we see that our top 10 directors have age gaps greater than 30 years, but they only directed one movie. The most our directors have in this dataset is 2 movies, so I think it’s safe to say a few directors aren’t exclusively responsible for these age-gap couples.</p>
+<p>Our last bit of exploration is getting a bit intense. Age gaps can be acceptable (or at least legal), between two consenting adults, but do we have any couples who we should call the police on? Per Romeo and Juliet laws, we’ll give a 5 year buffer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>movies<span class="sc">%&gt;%</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(Actor.<span class="fl">1.</span>Age <span class="sc">&lt;</span> <span class="dv">18</span> <span class="sc">|</span> Actor.<span class="fl">2.</span>Age <span class="sc">&lt;</span><span class="dv">18</span>, </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>         Age.Difference <span class="sc">&gt;</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                Movie.Name Release.Year     Director Age.Difference
+1               Poison Ivy         1992    Katt Shea             42
+2                   Lolita         1997  Adrian Lyne             32
+3 The Man Who Wasn't There         2001    Joel Coen             29
+4       Notes on a Scandal         2006 Richard Eyre             20
+5                The Crush         1993 Alan Shapiro             14
+6      Remember the Titans         2000   Boaz Yakin              7
+        Actor.1.Name Actor.1.Gender Actor.1.Birthdate Actor.1.Age
+1       Tom Skerritt            man        1933-08-25          59
+2       Jeremy Irons            man        1948-09-19          49
+3 Billy Bob Thornton            man        1955-08-04          46
+4     Andrew Simpson            man        1989-01-01          17
+5         Cary Elwes            man        1962-10-26          31
+6         Ryan Hurst            man        1976-06-19          24
+        Actor.2.Name Actor.2.Gender Actor.2.Birthdate Actor.2.Age
+1     Drew Barrymore          woman        1975-02-22          17
+2    Dominique Swain          woman        1980-08-12          17
+3 Scarlett Johansson          woman        1984-11-22          17
+4     Cate Blanchett          woman        1969-05-14          37
+5 Alicia Silverstone          woman        1976-10-04          17
+6      Kate Bosworth          woman        1983-01-02          17</code></pre>
+</div>
+</div>
+<p>We have 6 lovely movies that are questionable. And all of which were made pretty recently, a bit shocking. Our women are Hollywood IT girls: Drew Barrymore, Dominque Swain, Scarlett Johansson, and Kate Bosworth. Our men… are old (comparatively). We have <em>three</em> 20+ age differences, making these men in their 40s-50s as the love interest of 17 year olds. We also have Cate Blanchett (37) with Andrew Simpson (17) in Notes on a Scandal – which is fitting – and Cary Elwes and Alicia Silverstone in The Crush. While not appropriate, these are the premises of the movies.</p>
+</section>
+<section id="conclusions" class="level2">
+<h2 class="anchored" data-anchor-id="conclusions">Conclusions</h2>
+<p>This was a fun and slightly scandalous first Tidy Tuesday for me! I’m intruiged to see what more seasoned participants do with this information, as I feel like there’s a lot of fun ways you could spin this data.</p>
+<p>Ultimately, by my elementary findings, we can’t find an immediate rhyme or reason for these age gaps, or patterns among movies by Release Year, director, or specific actors. Of 1155 movies, only 3 really called legality into question which is slightly affirming; however, they were all filmed pretty recently (1990s+). We also didn’t look at those situations on the cusp, like an 18/19 year old with and older costar. With the given pop news, maybe I should have looked more into if Leonardo DiCaprio is mentioned anywhere. That might be a subject for another day.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

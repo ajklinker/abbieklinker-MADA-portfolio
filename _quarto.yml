@@ -18,6 +18,14 @@ website:
             href: ./visualization_exercise.html
           - text: "Tidy Tuesday Exercise"
             href: ./tidytuesday_exercise.html
+      - text: "Flu Analysis Exercise"
+        menu:
+          - text: "Wrangling"
+            href: ./fluanalysis/code/wrangling.html
+          - text: "Exploration"
+            href: ./fluanalysis/code/exploration.html
+          - text: "Fitting"
+            href: ./fluanalysis/code/fitting.html
             
     right:
       - icon: github 

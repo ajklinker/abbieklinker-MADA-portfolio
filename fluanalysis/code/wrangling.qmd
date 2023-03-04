@@ -1,0 +1,49 @@
+---
+title: "Wrangling"
+format: html
+editor: visual
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+```
+
+## Read In the Code
+
+I was having some difficulties "loading" the code as mentioned in the description for this exercise due to a "magic number X," but readRDS function seemed ok!
+
+```{r}
+SympAct_Any_Pos<-readRDS("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/SympAct_Any_Pos.Rda")
+```
+
+## Clean the Code
+
+Alrighty, now it's time to clean this up for the exercise. The first step is to remove all variables that have *Score* or *Total* or *FluA* or *FluB* or *DxName* or *Activity* in their name
+
+```{r, render=FALSE}
+select_sympact<-SympAct_Any_Pos%>%
+  select(-c(contains("Score"),contains("Total"), contains("FluA"), contains("FluB"), contains("DxName"), contains("Activity"), Unique.Visit))
+```
+
+```{r, echo=FALSE}
+rmarkdown::paged_table(select_sympact)
+```
+Great, this takes us down to 32 variables from 63, each with a list of symptoms the pt may or may not be experiencing. Now we have a lovely dataset we can use for future analysis.
+
+Since we are looking at Body Temperature and Nausea as our main outcome variables, let's investigate them quickly and make sure they are good to go for our next exploratory and analysis steps. 
+
+```{r}
+select_sympact%>%
+  filter(is.na(BodyTemp))
+
+select_sympact%>%
+  filter(is.na(Nausea))
+
+```
+
+To be aware of in the future, we have five missing values for BodyTemp, but none for Nausea. This is good to know as we dive into EDA and model fitting. Overall, this seems like a pretty clean dataset, so let's export it and get into the juicy stuff.
+
+```{r}
+save(select_sympact, file = "C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/clean_symptoms.rds")
+```
+

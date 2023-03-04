@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>My Data Analysis Portfolio - Exploration</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">My Data Analysis Portfolio</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../.././aboutme.html">
+ <span class="menu-text">About Me</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-projects" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Projects</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-projects">    
+        <li>
+    <a class="dropdown-item" href="../.././coding_exercise.html">
+ <span class="dropdown-text">R Coding Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././dataanalysis-exercise.html">
+ <span class="dropdown-text">Data Analysis Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././visualization_exercise.html">
+ <span class="dropdown-text">Visualization Exercise</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././tidytuesday_exercise.html">
+ <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-flu-analysis-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Flu Analysis Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-flu-analysis-exercise">    
+        <li>
+    <a class="dropdown-item" href="../.././fluanalysis/code/wrangling.html">
+ <span class="dropdown-text">Wrangling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././fluanalysis/code/exploration.html">
+ <span class="dropdown-text">Exploration</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././fluanalysis/code/fitting.html">
+ <span class="dropdown-text">Fitting</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../URL-TO-THIS-REPOSITORY-HERE"><i class="bi bi-github" role="img">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Exploration</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="load-in-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-in-the-data">Load in the Data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/clean_symptoms.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dora-the-explorer" class="level2">
+<h2 class="anchored" data-anchor-id="dora-the-explorer">Dora the Explorer!</h2>
+<p><strong>Goals:</strong> - For each (important) variable, produce and print some numerical output (e.g.&nbsp;a table or some summary statistics numbers).</p>
+<ul>
+<li><p>For each (important) continuous variable, create a histogram or density plot.</p></li>
+<li><p>Create scatterplots or boxplots or similar plots for the variable you decided is your main outcome of interest and the most important (or all depending on number of variables) independent variables/predictors. For this dataset, you can pick and choose a few predictor variables.</p></li>
+<li><p>Any other exploration steps that might be useful.</p></li>
+</ul>
+<section id="continuous-variable-body-temperature" class="level3">
+<h3 class="anchored" data-anchor-id="continuous-variable-body-temperature">Continuous Variable: Body Temperature</h3>
+<p>Let’s jump in with our continuous variable first.</p>
+<p><strong>Summary Table</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>select_sympact<span class="sc">%&gt;%</span>   <span class="co">#need to include na.rm exception since we have those 5 pesky NAs</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Avg =</span> <span class="fu">mean</span>(BodyTemp, <span class="at">na.rm=</span> T),</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">Min =</span> <span class="fu">min</span>(BodyTemp, <span class="at">na.rm=</span> T),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">Max =</span> <span class="fu">max</span>(BodyTemp, <span class="at">na.rm=</span> T),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">Range =</span> Max<span class="sc">-</span>Min,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">Q25 =</span> <span class="fu">quantile</span>(BodyTemp, <span class="at">probs =</span> .<span class="dv">25</span>, <span class="at">na.rm=</span> T), </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">Median =</span> <span class="fu">median</span>(BodyTemp, <span class="at">na.rm=</span> T),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">Q75 =</span> <span class="fu">quantile</span>(BodyTemp, <span class="at">probs =</span> .<span class="dv">75</span>, <span class="at">na.rm=</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Avg  Min   Max Range  Q25 Median  Q75
+1 98.93507 97.2 103.1   5.9 98.2   98.5 99.3</code></pre>
+</div>
+</div>
+<p>Off the bat, the good news is it doesn’t seem like we have any crazy outliers, as evidenced by the similarities between median and mean. Let’s make a graph to see if the 103 is an “outlier” (not large enough to be a true outlier, but maybe a lone wolf) or if there’s several participants with a fever &gt; 100.</p>
+<p>Since we removed the unique visit number, we only have the one continuous variable, so this limits our possible EDA graph options.</p>
+<p><strong>EDA Graphs: Body Temperature</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>BodyTemp), <span class="at">data=</span>select_sympact, <span class="at">fill =</span><span class="st">"#0072B2"</span>)<span class="sc">+</span>    <span class="co">#I made it a pretty color for fun :)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploration_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>So we can see that having a temperature over 100 isn’t unusual. This is good to know moving forward. Are any of them considered true outliers?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(BodyTemp), <span class="at">data=</span>select_sympact, <span class="at">fill =</span><span class="st">"#56B4E9"</span>)<span class="sc">+</span>    <span class="co">#I made it a pretty color for fun :)</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploration_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Alright this is good to know, even though a good number of people have temperatures greater than 101, by the spread available they are outliers in the data. Since there are so many and on a continuous scale, we won’t remove them, but these bad boys may be the reason we see the (slight) difference between median and mean.</p>
+<p>Off the top of my head when looking at possible predictors of body temperature, I would assume things like swollen lymph nodes, chills, subjective fever, myalgia, and weakness (Y/N) would be predictors. Let’s do some quick explorations with these variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>select_sympact<span class="sc">$</span>Temp_group<span class="ot">&lt;-</span><span class="fu">ifelse</span>(<span class="fu">between</span>(select_sympact<span class="sc">$</span>BodyTemp , <span class="dv">97</span>, <span class="fl">97.9</span>), <span class="dv">97</span>, </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">ifelse</span>(<span class="fu">between</span>(select_sympact<span class="sc">$</span>BodyTemp , <span class="dv">98</span>, <span class="fl">98.9</span>), <span class="dv">98</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                                         <span class="fu">ifelse</span>(<span class="fu">between</span>(select_sympact<span class="sc">$</span>BodyTemp , <span class="dv">99</span>, <span class="fl">99.9</span>), <span class="dv">99</span>,</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                                                <span class="fu">ifelse</span>(<span class="fu">between</span>(select_sympact<span class="sc">$</span>BodyTemp , <span class="dv">100</span>, <span class="fl">100.9</span>), <span class="dv">100</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                                       <span class="fu">ifelse</span>(<span class="fu">between</span>(select_sympact<span class="sc">$</span>BodyTemp , <span class="dv">101</span>, <span class="fl">101.9</span>), <span class="dv">101</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                                              <span class="fu">ifelse</span>(<span class="fu">between</span>(select_sympact<span class="sc">$</span>BodyTemp , <span class="dv">102</span>, <span class="fl">102.9</span>), <span class="dv">102</span>, <span class="dv">103</span>))))))</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Temp_group, select_sympact<span class="sc">$</span>SwollenLymphNodes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  97   48  44
+  98  223 167
+  99   81  55
+  100  31  23
+  101  18   9
+  102  12  10
+  103   5   4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Temp_group, select_sympact<span class="sc">$</span>ChillsSweats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  97   29  63
+  98   69 321
+  99   18 118
+  100   8  46
+  101   5  22
+  102   1  21
+  103   0   9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Temp_group, select_sympact<span class="sc">$</span>SubjectiveFever)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  97   46  46
+  98  128 262
+  99   41  95
+  100   8  46
+  101   4  23
+  102   2  20
+  103   1   8</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Temp_group, select_sympact<span class="sc">$</span>Weakness)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+      None Mild Moderate Severe
+  97    12   27       38     15
+  98    25  130      182     53
+  99     7   37       69     23
+  100    3   11       26     14
+  101    1    7       10      9
+  102    1    9        9      3
+  103    0    2        4      3</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Temp_group, select_sympact<span class="sc">$</span>Myalgia)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+      None Mild Moderate Severe
+  97    16   23       41     12
+  98    44  114      178     54
+  99     8   44       56     28
+  100    8   11       25     10
+  101    1    8       12      6
+  102    2    9        8      3
+  103    0    4        5      0</code></pre>
+</div>
+</div>
+<p>Based on the numbers alone, it seems like all of these variables are strong indicators of body temperature. The most questionable would be swollen lymph nodes. Checking these out in the analysis will definitely be helpful and should provide some solid models.</p>
+<p>Moving on…</p>
+<p>Let’s see what our categorical variable has in store for us.</p>
+</section>
+<section id="categorical-variable-nausea" class="level3">
+<h3 class="anchored" data-anchor-id="categorical-variable-nausea">Categorical Variable: Nausea</h3>
+<p>First, let’s see what our options for nausea entail:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(select_sympact<span class="sc">$</span>Nausea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] No  Yes
+Levels: No Yes</code></pre>
+</div>
+</div>
+<p>Just, yes and no, no maybe. This is good to know.</p>
+<p>Historically, for “extreme” categories with no midline, I’ve used JMP to help with analysis, especially with factorial models. So this will be a learning experience for me. Off the bat, let’s compare general counts between the two options.</p>
+<p><strong>Summary Table</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>select_sympact<span class="sc">%&gt;%</span>   </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(Nausea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Nausea   n
+1     No 477
+2    Yes 258</code></pre>
+</div>
+</div>
+<p><strong>EDA Graphs: Nausea</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>Nausea), <span class="at">data=</span>select_sympact, <span class="at">fill =</span><span class="st">"#0072B2"</span>)<span class="sc">+</span>    </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploration_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>For the benefit of the subjects, it’s nice to see most people aren’t experiencing nausea, though 258 cases isn’t something to ignore.</p>
+<p>Based on the symptoms available, I would assume that ab(domen) pain, chest pain, insomnia, vision, and vomit would be associated with nausea.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Nausea, select_sympact<span class="sc">$</span>AbPain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  No  446  31
+  Yes 196  62</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Nausea, select_sympact<span class="sc">$</span>ChestPain)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  No  342 135
+  Yes 159  99</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Nausea, select_sympact<span class="sc">$</span>Insomnia)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  No  215 262
+  Yes 101 157</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Nausea, select_sympact<span class="sc">$</span>Vision)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  No  468   9
+  Yes 248  10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Nausea, select_sympact<span class="sc">$</span>Vomit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  No  463  14
+  Yes 193  65</code></pre>
+</div>
+</div>
+<p>Based on these contingency tables, the strongest evidence of a symptom of nausea is insomnia, but these will be further evaluated in the model as well.</p>
+</section>
+<section id="both" class="level3">
+<h3 class="anchored" data-anchor-id="both">Both?</h3>
+<p>Great, now we have a basic understanding of these symptoms independently, but can we look at them together or if they relate to one another?</p>
+<p>Let’s make a basic contingency table with temp grouped by each degree</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(select_sympact<span class="sc">$</span>Temp_group, select_sympact<span class="sc">$</span>Nausea)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+       No Yes
+  97   67  25
+  98  248 142
+  99   90  46
+  100  33  21
+  101  16  11
+  102  18   4
+  103   3   6</code></pre>
+</div>
+</div>
+<p>I couldn’t get the contingency table to give me conditional rates, so below are the calculated rates (%) of nausea among each temperature group:</p>
+<p><strong>97</strong>: 27.2</p>
+<p><strong>98</strong>: 36.4</p>
+<p><strong>99</strong>: 33.8</p>
+<p><strong>100</strong>: 38.9</p>
+<p><strong>101</strong>: 40.7</p>
+<p><strong>102</strong>: 18.2</p>
+<p><strong>103</strong>: 66.7</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">x=</span>BodyTemp, <span class="at">fill =</span> Nausea), <span class="at">position =</span> <span class="st">"fill"</span>, <span class="at">data=</span>select_sympact)<span class="sc">+</span>    </span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="exploration_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>I chose a “fill” position here because since there was such a dense amount of body temperatures around 98 degrees it was hard to see if there was a trend between nausea and body temperature. Once we standardize the chart to represent the ratio at each degree (group) we can see there may be a general increase of rates of nausea with higher body temperatures, but we should measure this further (quantitatively).</p>
+<p>When looking at the contingency tables, this is still a bit varied. The relationship may be something we look at more in the analysis, but for now, we have inconclusive results about the interrelation of nausea and body temperature.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,93 @@
+---
+title: "Fitting"
+format: html
+editor: visual
+---
+```{r, include=FALSE}
+library(tidyverse)
+library(tidymodels)
+
+```
+
+## Load In Data
+
+```{r}
+load("./data/clean_symptoms.rds")
+```
+
+## Model Fitting
+
+**Goals:**
+
+-   Loads cleaned data.
+
+-   Fits a linear model to the continuous outcome (Body temperature) using only the main predictor of interest.
+
+-   Fits another linear model to the continuous outcome using all (important) predictors of interest.
+
+-   Compares the model results for the model with just the main predictor and all predictors.
+
+-   Fits a logistic model to the categorical outcome (Nausea) using only the main predictor of interest.
+
+-   Fits another logistic model to the categorical outcome using all (important) predictors of interest.
+
+-   Compares the model results for the categorical model with just the main predictor and all predictors.
+
+### Continuous + Runny Nose
+
+```{r}
+lm_fit <- 
+  linear_reg()  %>% 
+  set_engine("lm")%>%
+  fit(BodyTemp ~ RunnyNose,  data = select_sympact)
+tidy(lm_fit)
+```
+
+### Continuous + Everything
+
+Swollen lymph nodes, chills, subjective fever, myalgia, and weakness (Y/N)
+
+```{r}
+lm_fit2 <- 
+  linear_reg()  %>% 
+  set_engine("lm") %>%
+  fit(BodyTemp ~ SwollenLymphNodes + ChillsSweats +   SubjectiveFever + MyalgiaYN +  Weakness,  data = select_sympact)
+tidy(lm_fit2)
+
+```
+
+### Categorical + Runny Nose
+
+```{r}
+lm_fit3 <- 
+  logistic_reg()  %>% 
+  set_engine("glm") %>%
+  fit(Nausea ~ RunnyNose,  data = select_sympact)
+tidy(lm_fit3)
+
+```
+
+### Categorical + Everything
+
+Abdomen pain, chest pain, insomnia, vision, and vomit
+
+```{r}
+lm_fit4 <- 
+  logistic_reg()  %>% 
+  set_engine("glm") %>%
+  fit(Nausea ~ AbPain + ChestPain +   Insomnia + Vision +  Vomit,  data = select_sympact)
+tidy(lm_fit4)
+
+```
+
+### Comparisons 
+
+In terms of both of our outcomes of interest, using a more complex model may be more advantageous, especially considering the dataset has 32 variables of interest. It is limited to say that one variable has stronger predictive qualities than multiple used jointly (although chosen out of the statistician's (me) biases). 
+
+One drawback of using multiple variables is that in both categorical and continuous models, the predictors were split between yes/no and likert scales. For more in-depth analyses these should be considered more in depth - either by only using the yes/no scales, or finding a way to moderate the effect of different levels of factors between the different predictors. Applying the models' findings within the predict() function would also highlight drawbacks between the different models, and it's great that tidymodels has this capability built in rather than going through 5 extra steps using individual model packages. I hate to say that I'm not able to try it out at the moment due to this excercise's deadline. 
+
+I would love to play around with tidymodels more as well as KNN and Bayesian models. Exploring more of the tidymodels output as well as different model types is super interesting to me. I think I'm beginning to understand the tidymodels framework, and I'm intrigued by the implications it has outside of regression and logistical models. 
+
+Unfortunately due to the nature of deadlines, being able to take advantage of this exercise in its entirety hasn't been possible, but over the next few weeks I'm very interested in learning more about machine learning and its methods through R. Over spring break I'll likely revisit this exercise to better understand tidymodels and its capabilities - both for this class as well as my own research. If I discover any new insights I can add an addendum to this code. 
+
+Thank you!

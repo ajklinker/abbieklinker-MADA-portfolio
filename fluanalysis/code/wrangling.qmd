@@ -28,9 +28,10 @@ select_sympact<-SympAct_Any_Pos%>%
 ```{r, echo=FALSE}
 rmarkdown::paged_table(select_sympact)
 ```
+
 Great, this takes us down to 32 variables from 63, each with a list of symptoms the pt may or may not be experiencing. Now we have a lovely dataset we can use for future analysis.
 
-Since we are looking at Body Temperature and Nausea as our main outcome variables, let's investigate them quickly and make sure they are good to go for our next exploratory and analysis steps. 
+Since we are looking at Body Temperature and Nausea as our main outcome variables, let's investigate them quickly and make sure they are good to go for our next exploratory and analysis steps.
 
 ```{r}
 select_sympact%>%
@@ -46,4 +47,3 @@ To be aware of in the future, we have five missing values for BodyTemp, but none
 ```{r}
 save(select_sympact, file = "C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/clean_symptoms.rds")
 ```
-

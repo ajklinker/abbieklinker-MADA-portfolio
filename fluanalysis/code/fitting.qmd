@@ -12,7 +12,7 @@ library(tidymodels)
 ## Load In Data
 
 ```{r}
-load("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/clean_symptoms.rds")
+load("./fluanalysis/data/clean_symptoms.rds")
 ```
 
 ## Model Fitting

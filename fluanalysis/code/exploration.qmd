@@ -12,7 +12,7 @@ library(ggplot2)
 ## Load in the Data
 
 ```{r}
-load("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/clean_symptoms.rds")
+load("/fluanalysis/data/clean_symptoms.rds")
 ```
 
 ## Dora the Explorer!

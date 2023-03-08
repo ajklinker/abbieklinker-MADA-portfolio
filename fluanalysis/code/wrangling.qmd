@@ -13,7 +13,7 @@ library(tidyverse)
 I was having some difficulties "loading" the code as mentioned in the description for this exercise due to a "magic number X," but readRDS function seemed ok!
 
 ```{r}
-SympAct_Any_Pos<-readRDS("C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/SympAct_Any_Pos.Rda")
+SympAct_Any_Pos<-readRDS("./fluanalysis/data/SympAct_Any_Pos.Rda")
 ```
 
 ## Clean the Code
@@ -45,5 +45,5 @@ select_sympact%>%
 To be aware of in the future, we have five missing values for BodyTemp, but none for Nausea. This is good to know as we dive into EDA and model fitting. Overall, this seems like a pretty clean dataset, so let's export it and get into the juicy stuff.
 
 ```{r}
-save(select_sympact, file = "C:/Users/abbie/Desktop/MADA2023/abbieklinker-MADA-portfolio/fluanalysis/data/clean_symptoms.rds")
+save(select_sympact, file = "./fluanalysis/data/clean_symptoms.rds")
 ```

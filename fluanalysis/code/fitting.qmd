@@ -3,6 +3,7 @@ title: "Fitting"
 format: html
 editor: visual
 ---
+
 ```{r, include=FALSE}
 library(tidyverse)
 library(tidymodels)
@@ -80,14 +81,14 @@ tidy(lm_fit4)
 
 ```
 
-### Comparisons 
+### Comparisons
 
-In terms of both of our outcomes of interest, using a more complex model may be more advantageous, especially considering the dataset has 32 variables of interest. It is limited to say that one variable has stronger predictive qualities than multiple used jointly (although chosen out of the statistician's (me) biases). 
+In terms of both of our outcomes of interest, using a more complex model may be more advantageous, especially considering the dataset has 32 variables of interest. It is limited to say that one variable has stronger predictive qualities than multiple used jointly (although chosen out of the statistician's (me) biases).
 
-One drawback of using multiple variables is that in both categorical and continuous models, the predictors were split between yes/no and likert scales. For more in-depth analyses these should be considered more in depth - either by only using the yes/no scales, or finding a way to moderate the effect of different levels of factors between the different predictors. Applying the models' findings within the predict() function would also highlight drawbacks between the different models, and it's great that tidymodels has this capability built in rather than going through 5 extra steps using individual model packages. I hate to say that I'm not able to try it out at the moment due to this excercise's deadline. 
+One drawback of using multiple variables is that in both categorical and continuous models, the predictors were split between yes/no and likert scales. For more in-depth analyses these should be considered more in depth - either by only using the yes/no scales, or finding a way to moderate the effect of different levels of factors between the different predictors. Applying the models' findings within the predict() function would also highlight drawbacks between the different models, and it's great that tidymodels has this capability built in rather than going through 5 extra steps using individual model packages. I hate to say that I'm not able to try it out at the moment due to this excercise's deadline.
 
-I would love to play around with tidymodels more as well as KNN and Bayesian models. Exploring more of the tidymodels output as well as different model types is super interesting to me. I think I'm beginning to understand the tidymodels framework, and I'm intrigued by the implications it has outside of regression and logistical models. 
+I would love to play around with tidymodels more as well as KNN and Bayesian models. Exploring more of the tidymodels output as well as different model types is super interesting to me. I think I'm beginning to understand the tidymodels framework, and I'm intrigued by the implications it has outside of regression and logistical models.
 
-Unfortunately due to the nature of deadlines, being able to take advantage of this exercise in its entirety hasn't been possible, but over the next few weeks I'm very interested in learning more about machine learning and its methods through R. Over spring break I'll likely revisit this exercise to better understand tidymodels and its capabilities - both for this class as well as my own research. If I discover any new insights I can add an addendum to this code. 
+Unfortunately due to the nature of deadlines, being able to take advantage of this exercise in its entirety hasn't been possible, but over the next few weeks I'm very interested in learning more about machine learning and its methods through R. Over spring break I'll likely revisit this exercise to better understand tidymodels and its capabilities - both for this class as well as my own research. If I discover any new insights I can add an addendum to this code.
 
 Thank you!

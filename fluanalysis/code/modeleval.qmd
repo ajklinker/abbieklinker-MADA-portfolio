@@ -1,0 +1,180 @@
+---
+title: "Model Evaluation"
+format: html
+editor: visual
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(rsample)
+library(tidymodels)
+library(yardstick)
+```
+
+# Set it Up 
+
+Read in previously cleaned data
+
+```{r}
+load("../../fluanalysis/data/clean_symptoms.rds")
+```
+
+Train and test:
+
+```{r}
+set.seed(1234) 
+# Since we have less than 1000 observations, I'm going to do a 50/50 split.
+data_split <- initial_split(select_sympact, prop = 1/2)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+
+```
+
+# Categorical + Everything
+
+Recipe for a logistic model to our categorical outcome of interest (Nausea)
+
+```{r}
+cat_recipe1 <- 
+  recipe(Nausea ~ ., data = train_data) 
+
+```
+
+## Fit a Model with Workflow
+
+```{r}
+cat_model1 <- 
+  logistic_reg()  %>% 
+  set_engine("glm") 
+
+cat1_wflow <- 
+  workflow() %>% 
+  add_model(cat_model1) %>% 
+  add_recipe(cat_recipe1)
+
+cat1_fit <- 
+  cat1_wflow %>% 
+  fit(data = train_data)
+
+cat1_fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+Check with testing data
+
+```{r}
+predict(cat1_fit, test_data)
+
+cat1_aug <- 
+  augment(cat1_fit, test_data)
+
+cat1_aug
+
+```
+
+## ROC - AUC
+
+*Training Data* 
+
+```{r}
+cat1_train <- 
+  augment(cat1_fit, train_data)
+
+cat1_train
+
+cat1_train %>% 
+  roc_curve(truth = Nausea, .pred_No) %>%  #looked at the percent predicted NO Nausea rather than Yes to see the "under the curve" versus .pred_Yes providing area "over" the curve
+  autoplot()
+
+cat1_train %>% 
+  roc_auc(truth = Nausea, .pred_No)
+```
+
+*Testing Data*
+
+```{r}
+cat1_aug %>% 
+  roc_curve(truth = Nausea, .pred_No) %>%  #looked at the percent predicted NO Nausea rather than Yes to see the "under the curve" versus .pred_Yes providing area "over" the curve
+  autoplot()
+
+cat1_aug %>% 
+  roc_auc(truth = Nausea, .pred_No)
+```
+We see that the training data performed a bit better with our augment ROC-AUC estimated to be 0.79 versus with the tested data at 0.73, but both are still < 0.70 which is a promising start.
+
+# Categorical + Main Predictor (RunnyNose)
+
+Recipe for a logistic model to our categorical outcome of interest (Nausea)
+
+```{r}
+cat_recipe2 <- 
+  recipe(Nausea ~ RunnyNose, data = train_data) 
+
+```
+
+## Fit a Model with Workflow
+
+```{r}
+cat_model2 <- 
+  logistic_reg()  %>% 
+  set_engine("glm") 
+
+cat2_wflow <- 
+  workflow() %>% 
+  add_model(cat_model2) %>% 
+  add_recipe(cat_recipe2)
+
+cat2_fit <- 
+  cat2_wflow %>% 
+  fit(data = train_data)
+
+cat2_fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+Check with testing data
+
+```{r}
+predict(cat2_fit, test_data)
+
+cat2_aug <- 
+  augment(cat2_fit, test_data)
+
+cat2_aug
+
+```
+
+## ROC - AUC
+
+*Training Data* 
+
+```{r}
+cat2_train <- 
+  augment(cat2_fit, train_data)
+
+cat2_train
+
+cat2_train %>% 
+  roc_curve(truth = Nausea, .pred_No) %>% 
+  autoplot()
+
+cat2_train %>% 
+  roc_auc(truth = Nausea, .pred_No)
+```
+
+*Testing Data*
+
+```{r}
+cat2_aug %>% 
+  roc_curve(truth = Nausea, .pred_No) %>%  
+  autoplot()
+
+cat2_aug %>% 
+  roc_auc(truth = Nausea, .pred_No)
+```
+
+Here we see a similar difference between the train/test models with a difference of about 0.2 in the ROC-AUC estimates; however, overall type of model performs a lot worse than the predictive power of that with all the variables included. This makes sense as there are many types of symptoms associated in different componations with different illnesses, so accounting for these especially for an illness as general as the flu may be more advantageous in predicting the patient's symptoms/experience. 

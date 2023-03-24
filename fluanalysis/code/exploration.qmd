@@ -12,7 +12,7 @@ library(ggplot2)
 ## Load in the Data
 
 ```{r}
-load("/fluanalysis/data/clean_symptoms.rds")
+load("../../fluanalysis/data/clean_symptoms.rds")
 ```
 
 ## Dora the Explorer!

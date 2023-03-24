@@ -184,11 +184,13 @@ Here we see a similar difference between the train/test models with a difference
 # This section was added by Christian Okitondo
 
 ## Fitting the above steps with a continuous outcome (Body Temperature) and all preditors
+
 ```{r}
 flu_mod10_cont_rec <- recipe(BodyTemp ~ ., data = train_data) 
 ```
 
 ### Workflow creation and model fitting
+
 ```{r}
 
 # Linear regression 
@@ -211,8 +213,8 @@ cont1_fit %>%
   tidy()
 ```
 
-
 ### Using the trained workflow (cont1_fit) to predict with the unseen test data
+
 ```{r}
 predict(cont1_fit, test_data)
 cont1_aug <- 
@@ -223,23 +225,27 @@ cont1_aug
 ### RMSE
 
 #### Starting with Training data
+
 ```{r}
 cont1_train <- 
   augment(cont1_fit, train_data)
 yardstick::rmse(cont1_train, BodyTemp, .pred)
 ```
+
 RMSE of training model is around 1.13
 
 #### Now Testing data
+
 ```{r}
 yardstick::rmse(cont1_aug, BodyTemp, .pred)
 ```
+
 RMSE of testing model is around 1.15
 
 Thus, the training model perfomence is slighly better than the testing, but that difference is very minimal (1.15 - 1.13 = 0.02).
 
+## Continuous with RunnyNose as the main predictor
 
-## Continuous  with RunnyNose as the main predictor
 ```{r}
 cont_recipe2 <- 
   recipe(BodyTemp ~ RunnyNose, data = train_data) 
@@ -274,15 +280,17 @@ cont2_fit %>%
 ### RMSE
 
 #### Starting with Trainind data
+
 ```{r}
 cont2_train <- 
   augment(cont2_fit, train_data)
 yardstick::rmse(cont2_train, BodyTemp, .pred)
 ```
+
 Estimated RMSE is 1.23
 
-
 #### Now using the testing data
+
 ```{r}
 predict(cont2_fit, test_data)
 cont2_aug <- 
@@ -292,9 +300,6 @@ cont2_aug
 yardstick::rmse(cont2_aug, BodyTemp, .pred)
 ```
 
-Estimated RMSE is 1.15. 
+Estimated RMSE is 1.15.
 
-Thus the testing model performs better than the training model. 
-
-
-
+Thus the testing model performs better than the training model.

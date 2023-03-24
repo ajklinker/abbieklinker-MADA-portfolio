@@ -13,7 +13,7 @@ library(tidymodels)
 ## Load In Data
 
 ```{r}
-load("./fluanalysis/data/clean_symptoms.rds")
+load("../../fluanalysis/data/clean_symptoms.rds")
 ```
 
 ## Model Fitting

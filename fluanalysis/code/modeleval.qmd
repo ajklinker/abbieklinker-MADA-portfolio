@@ -12,7 +12,7 @@ library(tidymodels)
 library(yardstick)
 ```
 
-# Set it Up 
+# Set it Up
 
 Read in previously cleaned data
 
@@ -63,6 +63,7 @@ cat1_fit %>%
   extract_fit_parsnip() %>% 
   tidy()
 ```
+
 Check with testing data
 
 ```{r}
@@ -77,7 +78,7 @@ cat1_aug
 
 ## ROC - AUC
 
-*Training Data* 
+*Training Data*
 
 ```{r}
 cat1_train <- 
@@ -103,7 +104,8 @@ cat1_aug %>%
 cat1_aug %>% 
   roc_auc(truth = Nausea, .pred_No)
 ```
-We see that the training data performed a bit better with our augment ROC-AUC estimated to be 0.79 versus with the tested data at 0.73, but both are still < 0.70 which is a promising start.
+
+We see that the training data performed a bit better with our augment ROC-AUC estimated to be 0.79 versus with the tested data at 0.73, but both are still \< 0.70 which is a promising start.
 
 # Categorical + Main Predictor (RunnyNose)
 
@@ -150,7 +152,7 @@ cat2_aug
 
 ## ROC - AUC
 
-*Training Data* 
+*Training Data*
 
 ```{r}
 cat2_train <- 
@@ -177,4 +179,122 @@ cat2_aug %>%
   roc_auc(truth = Nausea, .pred_No)
 ```
 
-Here we see a similar difference between the train/test models with a difference of about 0.2 in the ROC-AUC estimates; however, overall type of model performs a lot worse than the predictive power of that with all the variables included. This makes sense as there are many types of symptoms associated in different componations with different illnesses, so accounting for these especially for an illness as general as the flu may be more advantageous in predicting the patient's symptoms/experience. 
+Here we see a similar difference between the train/test models with a difference of about 0.2 in the ROC-AUC estimates; however, overall type of model performs a lot worse than the predictive power of that with all the variables included. This makes sense as there are many types of symptoms associated in different componations with different illnesses, so accounting for these especially for an illness as general as the flu may be more advantageous in predicting the patient's symptoms/experience.
+
+# This section was added by Christian Okitondo
+
+## Fitting the above steps with a continuous outcome (Body Temperature) and all preditors
+```{r}
+flu_mod10_cont_rec <- recipe(BodyTemp ~ ., data = train_data) 
+```
+
+### Workflow creation and model fitting
+```{r}
+
+# Linear regression 
+cont_model1 <- 
+  linear_reg()  %>% 
+  set_engine("lm") 
+
+# Paring model with receip
+cont1_wflow <- 
+  workflow() %>% 
+  add_model(cont_model1) %>% 
+  add_recipe(flu_mod10_cont_rec)
+
+# Looking at the model output
+cont1_fit <- 
+  cont1_wflow %>% 
+  fit(data = train_data)
+cont1_fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+
+### Using the trained workflow (cont1_fit) to predict with the unseen test data
+```{r}
+predict(cont1_fit, test_data)
+cont1_aug <- 
+  augment(cont1_fit, test_data)
+cont1_aug
+```
+
+### RMSE
+
+#### Starting with Training data
+```{r}
+cont1_train <- 
+  augment(cont1_fit, train_data)
+yardstick::rmse(cont1_train, BodyTemp, .pred)
+```
+RMSE of training model is around 1.13
+
+#### Now Testing data
+```{r}
+yardstick::rmse(cont1_aug, BodyTemp, .pred)
+```
+RMSE of testing model is around 1.15
+
+Thus, the training model perfomence is slighly better than the testing, but that difference is very minimal (1.15 - 1.13 = 0.02).
+
+
+## Continuous  with RunnyNose as the main predictor
+```{r}
+cont_recipe2 <- 
+  recipe(BodyTemp ~ RunnyNose, data = train_data) 
+```
+
+### Fit a Model with Workflow
+
+```{r}
+
+# Setting up a linear model
+cont_model2 <- 
+  linear_reg()  %>% 
+  set_engine("lm") 
+
+# Modeling workflow for pairing model and recipe
+cont2_wflow <- 
+  workflow() %>% 
+  add_model(cont_model2) %>% 
+  add_recipe(cont_recipe2)
+
+# Using the resulting predictors for preparing recipe and training model
+cont2_fit <- 
+  cont2_wflow %>% 
+  fit(data = train_data)
+
+# Pulling the fitted model object and using tidy() function for getting a tidy tibble of model coefficients. 
+cont2_fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+### RMSE
+
+#### Starting with Trainind data
+```{r}
+cont2_train <- 
+  augment(cont2_fit, train_data)
+yardstick::rmse(cont2_train, BodyTemp, .pred)
+```
+Estimated RMSE is 1.23
+
+
+#### Now using the testing data
+```{r}
+predict(cont2_fit, test_data)
+cont2_aug <- 
+  augment(cont2_fit, test_data)
+cont2_aug
+## RMSE - TEST
+yardstick::rmse(cont2_aug, BodyTemp, .pred)
+```
+
+Estimated RMSE is 1.15. 
+
+Thus the testing model performs better than the training model. 
+
+
+

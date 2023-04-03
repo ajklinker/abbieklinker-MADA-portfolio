@@ -6,6 +6,7 @@ editor: visual
 
 ```{r, include = FALSE}
 library(tidyverse)
+library(tidymodels)
 ```
 
 ## Read In the Code
@@ -42,8 +43,42 @@ select_sympact%>%
 
 ```
 
-To be aware of in the future, we have five missing values for BodyTemp, but none for Nausea. This is good to know as we dive into EDA and model fitting. Overall, this seems like a pretty clean dataset, so let's export it and get into the juicy stuff.
+To be aware of in the future, we have five missing values for BodyTemp, but none for Nausea. This is good to know as we dive into EDA and model fitting.
+
+## Continued Data Cleaning for Models
+
+We need to adjust the variables included as we continue with model creation. This will prevent us from confusing/adding redundancy for the model. Specifically, for those symptoms with both multiple levels and yes/no, remove all the yes/no versions.
 
 ```{r}
-save(select_sympact, file = "../../fluanalysis/data/clean_symptoms.rds")
+no_YN_symptoms<-select_sympact%>%
+  select(-c(CoughYN, CoughYN2, WeaknessYN, MyalgiaYN))
+
+```
+
+Now that we only have the leveled options left, we need to code the categorical variables as unordered factors and the others as ordered factors.
+
+```{r}
+severity<-c("None", "Mild" ,"Moderate", "Severe")
+no_YN_symptoms$CoughIntensity<-factor(no_YN_symptoms$CoughIntensity, levels = severity, ordered = TRUE)
+no_YN_symptoms$Myalgia<-factor(no_YN_symptoms$Myalgia, levels = severity, ordered = TRUE)
+no_YN_symptoms$Weakness<-factor(no_YN_symptoms$Weakness, levels = severity, ordered = TRUE)
+
+```
+
+Check for unbalanced variables. We're removing any Yes/No options with less than 50 occurences of "Yes" reports as they are not anticipated to be helpful here.
+
+```{r}
+length(which(no_YN_symptoms$Hearing == "Yes"))
+length(which(no_YN_symptoms$Vision == "Yes"))
+
+
+balanced_symptoms<-no_YN_symptoms%>%
+ select(-c(Hearing, Vision))
+  
+```
+
+## Save Necessary Files
+
+```{r}
+save(select_sympact, balanced_symptoms, file = "../../fluanalysis/data/clean_symptoms.RData")
 ```

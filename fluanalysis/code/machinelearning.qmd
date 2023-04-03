@@ -1,0 +1,182 @@
+---
+title: "Machine Learning"
+format: html
+editor: visual
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(ggplot2)
+library(rsample)
+library(tidymodels)
+library(yardstick)
+```
+
+# Set it Up
+
+Read in previously cleaned data
+
+```{r}
+load("../../fluanalysis/data/clean_symptoms.RData")
+
+# balanced_symptoms$Weakness<-as.factor(balanced_symptoms$Weakness)
+# balanced_symptoms$CoughIntensity<-as.factor(balanced_symptoms$CoughIntensity)
+# balanced_symptoms$Myalgia<-as.factor(balanced_symptoms$Myalgia)
+
+```
+
+Split the data
+
+```{r}
+set.seed(123)
+
+data_split <- initial_split(balanced_symptoms, prop = 7/10, strata = BodyTemp)
+
+# Create data frames for the two sets:
+train_data <- training(data_split)
+test_data  <- testing(data_split)
+
+```
+
+Set up the 5x5 split
+
+```{r}
+folds <- vfold_cv(train_data, v = 5, repeats =5, strata = BodyTemp)
+```
+
+Create a recipe
+
+```{r}
+model_recipe3 <- 
+  recipe(BodyTemp ~ ., data = train_data) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_ordinalscore(Myalgia, CoughIntensity, Weakness)
+
+model_recipe3<-prep(model_recipe3, training = train_data)
+
+```
+
+## Model Creation
+
+### Null Model
+
+Build the model
+
+```{r}
+null<-null_model() %>% 
+  set_engine("parsnip") %>% 
+  set_mode("regression") %>% 
+  translate()
+
+null_wf <-
+  workflow() %>%
+  add_model(null) %>%
+  add_recipe(model_recipe3)
+
+null_fit <-
+  null_wf %>%
+  fit(train_data)
+
+null_fit %>%
+  extract_fit_parsnip() %>%
+  tidy()
+```
+
+View Trained RMSE
+
+```{r}
+null_train_aug <- 
+  augment(null_fit, train_data)
+
+yardstick::rmse(null_train_aug, BodyTemp, .pred)
+```
+
+Test the Null Model
+
+```{r}
+predict(null_fit, test_data)
+
+null_test_aug <- 
+  augment(null_fit, test_data)
+
+yardstick::rmse(null_test_aug, BodyTemp, .pred)
+```
+
+### Decision Tree 
+
+```{r, warning=FALSE}
+tune_spec <- 
+  decision_tree(
+    cost_complexity = tune(),
+    tree_depth = tune()
+  ) %>% 
+  set_engine("rpart") %>% 
+  set_mode("regression")
+
+tree_grid <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          levels = 5)
+
+tree_wf <- workflow() %>%
+  add_model(tune_spec) %>%
+  add_recipe(model_recipe3)
+
+tree_res <- 
+  tree_wf %>% 
+  tune_grid(
+    resamples = folds, #recall this created CV from earlier
+    grid = tree_grid
+    )
+
+tree_res %>%collect_metrics()
+
+tree_res %>%
+  show_best("rmse")
+```
+
+### LASSO 
+
+```{r}
+set.seed(123)
+
+lr_mod <- linear_reg(penalty = tune(), mixture = 1) %>% 
+  set_engine("glmnet")
+
+lr_workflow <- 
+  workflow() %>% 
+  add_model(lr_mod) %>% 
+  add_recipe(model_recipe3)
+
+lr_reg_grid <- tibble(penalty = 10^seq(-4, -1, length.out = 30))
+
+lr_reg_grid %>% top_n(-5) # lowest penalty values
+lr_reg_grid %>% top_n(5)  # highest penalty values
+
+lr_res <- lr_workflow %>% 
+  tune_grid(resamples = folds,
+            grid = lr_reg_grid)
+
+lr_res %>% show_best("rmse")
+best_lasso = lasso_res %>%
+  select_best("rmse")
+```
+
+### Random Forest 
+
+```{r}
+rf_mod <-
+  rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %>% 
+  set_engine("ranger") %>% 
+  set_mode("regression")
+
+ml_model2 <- recipe(BodyTemp ~ ., data = train_data)
+
+rf_workflow <-
+  workflow() %>%
+  add_model(rf_mod)  %>%
+  add_recipe(ml_model2)
+
+rf_res <- 
+  rf_workflow %>% 
+  tune_grid(folds)
+```

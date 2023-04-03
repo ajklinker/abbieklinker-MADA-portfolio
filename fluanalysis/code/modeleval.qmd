@@ -17,7 +17,7 @@ library(yardstick)
 Read in previously cleaned data
 
 ```{r}
-load("../../fluanalysis/data/clean_symptoms.rds")
+load("../../fluanalysis/data/clean_symptoms.RData")
 ```
 
 Train and test:

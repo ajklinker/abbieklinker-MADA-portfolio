@@ -4,6 +4,8 @@ format: html
 editor: visual
 ---
 
+I had the worst luck with this exercise. Something went wrong with my ordinal factors. I peaked at other students' code and mine matched, but the code did not run. If the model coding was the same, I can only assume something went wrong with the data wranging, but all the steps I tried and different methods for dummy/ordered factors didn't change the outcome. Maybe ML and I aren't meant to be :(
+
 ```{r, include = FALSE}
 library(tidyverse)
 library(ggplot2)
@@ -19,6 +21,7 @@ Read in previously cleaned data
 ```{r}
 load("../../fluanalysis/data/clean_symptoms.RData")
 
+# Attempt # 15 of ordering/deording the variables so the models run well.
 # balanced_symptoms$Weakness<-as.factor(balanced_symptoms$Weakness)
 # balanced_symptoms$CoughIntensity<-as.factor(balanced_symptoms$CoughIntensity)
 # balanced_symptoms$Myalgia<-as.factor(balanced_symptoms$Myalgia)
@@ -49,11 +52,11 @@ Create a recipe
 ```{r}
 model_recipe3 <- 
   recipe(BodyTemp ~ ., data = train_data) %>%
-  step_dummy(all_nominal_predictors()) %>%
-  step_ordinalscore(Myalgia, CoughIntensity, Weakness)
+  step_dummy(all_nominal_predictors()) 
+ # step_ordinalscore(Myalgia, CoughIntensity, Weakness) commenting out because it doesn't want to find the variables unless under VERY specific conditions (idk what those conditions are)
 
-model_recipe3<-prep(model_recipe3, training = train_data)
-
+# model_recipe3<-prep(model_recipe3, training = train_data)
+# An attempt I saw someone else do, it didn't work for me :(
 ```
 
 ## Model Creation
@@ -102,7 +105,7 @@ null_test_aug <-
 yardstick::rmse(null_test_aug, BodyTemp, .pred)
 ```
 
-### Decision Tree 
+### Decision Tree
 
 ```{r, warning=FALSE}
 tune_spec <- 
@@ -121,20 +124,21 @@ tree_wf <- workflow() %>%
   add_model(tune_spec) %>%
   add_recipe(model_recipe3)
 
-tree_res <- 
-  tree_wf %>% 
-  tune_grid(
-    resamples = folds, #recall this created CV from earlier
-    grid = tree_grid
-    )
+## Commenting out because otherwise it will run errors and won't knit
+# tree_res <- 
+#   tree_wf %>% 
+#   tune_grid(
+#     resamples = folds, #recall this created CV from earlier
+#     grid = tree_grid
+#     )
 
-tree_res %>%collect_metrics()
-
-tree_res %>%
-  show_best("rmse")
+# tree_res %>%collect_metrics()
+# 
+# tree_res %>%
+#   show_best("rmse")
 ```
 
-### LASSO 
+### LASSO
 
 ```{r}
 set.seed(123)
@@ -152,16 +156,17 @@ lr_reg_grid <- tibble(penalty = 10^seq(-4, -1, length.out = 30))
 lr_reg_grid %>% top_n(-5) # lowest penalty values
 lr_reg_grid %>% top_n(5)  # highest penalty values
 
-lr_res <- lr_workflow %>% 
-  tune_grid(resamples = folds,
-            grid = lr_reg_grid)
-
-lr_res %>% show_best("rmse")
-best_lasso = lasso_res %>%
-  select_best("rmse")
+## Commenting out because otherwise it will run errors and won't knit
+# lr_res <- lr_workflow %>% 
+#   tune_grid(resamples = folds,
+#             grid = lr_reg_grid)   #Had more options here but other students didn't and theirs ran ok, mine did not regardless
+# 
+# lr_res %>% show_best("rmse")
+# best_lasso = lasso_res %>%
+#   select_best("rmse")
 ```
 
-### Random Forest 
+### Random Forest
 
 ```{r}
 rf_mod <-
@@ -176,7 +181,8 @@ rf_workflow <-
   add_model(rf_mod)  %>%
   add_recipe(ml_model2)
 
-rf_res <- 
-  rf_workflow %>% 
-  tune_grid(folds)
+## Commenting out because otherwise it will run errors and won't knit
+# rf_res <- 
+#   rf_workflow %>% 
+#   tune_grid(folds)
 ```

@@ -170,6 +170,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <a class="dropdown-item" href="../.././tidytuesday_exercise.html">
  <span class="dropdown-text">Tidy Tuesday Exercise</span></a>
   </li>  
+        <li class="dropdown-header">Tidy Tuesday 2 Exercise</li>
+        <li>
+    <a class="dropdown-item" href="../.././tidytuesday_exercise2.html">
+ <span class="dropdown-text"></span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -192,6 +197,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li>
     <a class="dropdown-item" href="../.././fluanalysis/code/modeleval.html">
  <span class="dropdown-text">Model Evaluation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../.././fluanalysis/code/machinelearning.html">
+ <span class="dropdown-text">Machine Learning</span></a>
   </li>  
     </ul>
   </li>
@@ -308,9 +317,40 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 &lt;0 rows&gt; (or 0-length row.names)</code></pre>
 </div>
 </div>
-<p>To be aware of in the future, we have five missing values for BodyTemp, but none for Nausea. This is good to know as we dive into EDA and model fitting. Overall, this seems like a pretty clean dataset, so let’s export it and get into the juicy stuff.</p>
+<p>To be aware of in the future, we have five missing values for BodyTemp, but none for Nausea. This is good to know as we dive into EDA and model fitting.</p>
+</section>
+<section id="continued-data-cleaning-for-models" class="level2">
+<h2 class="anchored" data-anchor-id="continued-data-cleaning-for-models">Continued Data Cleaning for Models</h2>
+<p>We need to adjust the variables included as we continue with model creation. This will prevent us from confusing/adding redundancy for the model. Specifically, for those symptoms with both multiple levels and yes/no, remove all the yes/no versions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(select_sympact, <span class="at">file =</span> <span class="st">"../../fluanalysis/data/clean_symptoms.rds"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>no_YN_symptoms<span class="ot">&lt;-</span>select_sympact<span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(CoughYN, CoughYN2, WeaknessYN, MyalgiaYN))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now that we only have the leveled options left, we need to code the categorical variables as unordered factors and the others as ordered factors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>severity<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"None"</span>, <span class="st">"Mild"</span> ,<span class="st">"Moderate"</span>, <span class="st">"Severe"</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>no_YN_symptoms<span class="sc">$</span>CoughIntensity<span class="ot">&lt;-</span><span class="fu">factor</span>(no_YN_symptoms<span class="sc">$</span>CoughIntensity, <span class="at">levels =</span> severity, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>no_YN_symptoms<span class="sc">$</span>Myalgia<span class="ot">&lt;-</span><span class="fu">factor</span>(no_YN_symptoms<span class="sc">$</span>Myalgia, <span class="at">levels =</span> severity, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>no_YN_symptoms<span class="sc">$</span>Weakness<span class="ot">&lt;-</span><span class="fu">factor</span>(no_YN_symptoms<span class="sc">$</span>Weakness, <span class="at">levels =</span> severity, <span class="at">ordered =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Check for unbalanced variables. We’re removing any Yes/No options with less than 50 occurences of “Yes” reports as they are not anticipated to be helpful here.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">which</span>(no_YN_symptoms<span class="sc">$</span>Hearing <span class="sc">==</span> <span class="st">"Yes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 30</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">which</span>(no_YN_symptoms<span class="sc">$</span>Vision <span class="sc">==</span> <span class="st">"Yes"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 19</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>balanced_symptoms<span class="ot">&lt;-</span>no_YN_symptoms<span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(Hearing, Vision))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="save-necessary-files" class="level2">
+<h2 class="anchored" data-anchor-id="save-necessary-files">Save Necessary Files</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(select_sympact, balanced_symptoms, <span class="at">file =</span> <span class="st">"../../fluanalysis/data/clean_symptoms.RData"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

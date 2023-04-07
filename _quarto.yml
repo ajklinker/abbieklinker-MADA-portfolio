@@ -18,6 +18,8 @@ website:
             href: ./visualization_exercise.html
           - text: "Tidy Tuesday Exercise"
             href: ./tidytuesday_exercise.html
+          - text: "Tidy Tuesday 2 Exercise"
+          - href: ./tidytuesday_exercise2.html
       - text: "Flu Analysis Exercise"
         menu:
           - text: "Wrangling"
@@ -28,6 +30,8 @@ website:
             href: ./fluanalysis/code/fitting.html
           - text: "Model Evaluation"
             href: ./fluanalysis/code/modeleval.html
+          - text: "Machine Learning"
+            href: ./fluanalysis/code/machinelearning.html
             
     right:
       - icon: github 
@@ -35,7 +39,7 @@ website:
 
 format:
   html:
-    theme: cosmo
+    theme: flatly
     highlight: zenburn
     css: styles.css
     toc: FALSE

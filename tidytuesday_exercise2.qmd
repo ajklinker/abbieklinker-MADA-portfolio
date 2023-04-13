@@ -1,5 +1,385 @@
 ---
-title: "To be filled soon :)"
-
-
+title: "Tidy Tuesday Exercise 2"
+format: html
+editor: visual
 ---
+
+```{r, include = FALSE}
+library(tidyverse)
+library(tidytuesdayR)
+library(ggplot2)
+library(tidymodels)
+library(qdapTools)
+library(lubridate)
+library(yardstick)
+library(vip)
+```
+
+# Load in the code 
+
+```{r}
+tuesdata <- tt_load('2023-04-11')
+
+eggproduction <- tuesdata[["egg-production"]][, 1:5]  #remove source as it won't be helpful to us
+cagefreepercentages <-tuesdata[["cage-free-percentages"]][, 1:3]
+
+```
+
+## Data Exploration and Cleaning
+
+For the sake of this exercise, I'm going to be focusing on the `eggproduction` dataset. First I'm going to do some exploratory graphing to see what the general distributions look like. After looking, the structure of all the variables are as their supposed to be - dates as dates, numbers are numbers, etc.
+
+```{r}
+ggplot()+
+  geom_line(aes(x=observed_month, y= n_eggs, group=prod_process, color=prod_process), data=eggproduction)+
+  facet_wrap(.~prod_type)+
+  theme_bw()
+
+```
+
+This is great! This graph tells us a lot. First, it shows the data is pretty clean as the data graphed with no problems. It tells us that table eggs are produced at a vastly greater rate than hatching eggs, and that there are no cage-free hatched eggs. We also see a rise in production of table eggs for cage-free (nonorganic) and the total trend. 
+
+```{r}
+cor(eggproduction$n_hens, eggproduction$n_eggs)
+
+ggplot()+
+  geom_point(aes(x=eggproduction$n_hens, y= eggproduction$n_eggs, color=eggproduction$prod_process))
+
+```
+
+We see the differences in egg production by type of egg replicated in this scatter-plot, but we can also see the nearly straight correlation between the number of eggs and the number of hens across all groups. This doesn't help us much in terms of creating a hypothesis about possible differences here. 
+
+The only data cleaning I want to do off the bat is create another category rather than "all", since this is a sum that includes cage-free and I want to see what the conventional housing distribution is alone.
+
+```{r}
+eggproduction$n_eggs<-as.numeric(eggproduction$n_eggs)
+
+egg_types<-spread(eggproduction, prod_process, n_eggs)%>%
+  filter(prod_type == "table eggs", observed_month != "2016-07-31", observed_month != "2021-02-28")%>%
+  select(-n_hens)%>%
+  group_by(observed_month)%>%
+  fill(`cage-free (organic)`, .direction = "down")%>%
+  fill( all, .direction = "up")%>%
+  fill(`cage-free (non-organic)`, .direction = "updown")%>%
+  unique()%>%
+  mutate(conventional = all -`cage-free (organic)`-`cage-free (non-organic)`)
+
+
+```
+
+Now that we have the calculated number of conventional egg production, we can merge back into our full dataset.
+
+```{r}
+egg_types_tall<-gather(egg_types,key = prod_process, value = "n_eggs", all:conventional)
+
+egg_types_all<-full_join(eggproduction, egg_types_tall)
+
+```
+
+Graph it to make sure it worked
+
+```{r}
+ggplot()+
+  geom_line(aes(x=observed_month, y= n_eggs, group=prod_process, color=prod_process), data=egg_types_all)+
+  facet_wrap(.~prod_type)+
+  theme_bw()
+
+```
+
+Awesome! Now we can start looking into hypotheses and questions for our model.
+
+## Hypothesis Generation
+
+While we have consistent information for trends related to years and within the number of eggs hatched per hen, I'm interested in seeing this data at the monthly level and within different production processes. To do this, I'm going to clean the data a bit further to focus on the table eggs since we have different production methods, elimininate the "all" option, and isolate the month the eggs were produced.
+
+```{r}
+model_egg_data<-egg_types_all%>%
+  filter(prod_type != "hatching eggs",
+         prod_process != "all")%>%
+  mutate(month = month(observed_month))%>%
+  select(-observed_month, -n_hens, -prod_type)
+
+model_egg_data$month<-as.factor(model_egg_data$month)
+```
+
+Based on the line graphs, it seems there dips in egg production around Feb/March each year. I predict that Feb/March has the greatest negative impact on egg production while early summer months (May/June) have the greatest positive impact on egg production. I'm using the production process as a strata in case this varies by process. Because of this, I am including the variable in the model. 
+
+# Model Creation
+
+## Setting it Up
+
+*Split the data*
+
+```{r}
+set.seed(123)
+
+data_split <- initial_split(model_egg_data, prop = 7/10, strata = prod_process) 
+
+train_data <- training(data_split) 
+test_data  <- testing(data_split)
+
+```
+
+We don't a lot of entries for cross-validation due to only having 274 county/Food Bank combinations, so we'll only do a 3x3 split.
+
+```{r}
+folds <- vfold_cv(train_data, v = 3, repeats =3, strata = prod_process)
+```
+
+*Create a recipe*
+
+```{r}
+egg_rates_recipe <- 
+  recipe(n_eggs ~ ., data = train_data) %>%
+  step_dummy(month, prod_process) 
+
+
+```
+
+## Null Model
+
+Build the model
+
+```{r}
+null<-null_model() %>% 
+  set_engine("parsnip") %>% 
+  set_mode("regression") %>% 
+  translate()
+
+null_wf <-
+  workflow() %>%
+  add_model(null) %>%
+  add_recipe(egg_rates_recipe)
+
+null_fit <-
+  null_wf %>%
+  fit(train_data)
+
+null_fit %>%
+  extract_fit_parsnip() %>%
+  tidy()
+```
+
+View Trained RMSE
+
+```{r}
+null_train_aug <- 
+  augment(null_fit, train_data)
+
+yardstick::rmse(null_train_aug, n_eggs, .pred)
+```
+
+Test the Null Model
+
+```{r}
+predict(null_fit, test_data)
+
+null_test_aug <- 
+  augment(null_fit, test_data)
+
+yardstick::rmse(null_test_aug, n_eggs, .pred)
+```
+
+## Decision Tree
+
+```{r, warning=FALSE}
+set.seed(123)
+
+tune_spec <- 
+  decision_tree(
+    cost_complexity = tune(),
+    tree_depth = tune()
+  ) %>% 
+  set_engine("rpart") %>% 
+  set_mode("regression")
+
+tree_grid <- grid_regular(cost_complexity(),
+                          tree_depth(),
+                          levels = 5)
+
+tree_wf <- workflow() %>%
+  add_model(tune_spec) %>%
+  add_recipe(egg_rates_recipe)
+
+tree_res <-
+  tree_wf %>%
+  tune_grid(
+    resamples = folds, #recall this created CV from earlier
+    grid = tree_grid)
+
+
+tree_res %>%collect_metrics()
+
+tree_res %>%
+  show_best("rmse")
+
+best_tree <- tree_res %>%
+  select_best("rmse")
+
+best_tree
+
+final_wf <- 
+  tree_wf %>% 
+  finalize_workflow(best_tree)
+
+final_fit <- 
+  final_wf %>%
+  last_fit(data_split) 
+
+final_fit %>%
+  collect_metrics()
+
+final_fit %>%
+  collect_predictions()
+
+final_tree <- extract_workflow(final_fit)
+final_tree
+
+final_tree %>% 
+  extract_fit_parsnip() %>% 
+  vip()
+```
+
+## LASSO
+
+For the lasso I'm changing up the workflow based on a resource a classmate recommended to me by one of the tidymodels creators. We're going to see if I have better luck with these methods. Her explanations were very helpful, and hopefully her methods will work on my data! 
+
+**TRAIN**
+
+```{r}
+##TRAIN
+lr_mod <- linear_reg(penalty = 0.1 , mixture = 1) %>% 
+  set_engine("glmnet")
+
+lr_workflow <- 
+  workflow() %>% 
+  add_recipe(egg_rates_recipe)
+
+lasso_fit<- lr_workflow%>%
+  add_model(lr_mod) %>% 
+  fit(data = train_data)
+
+lasso_fit%>%pull_workflow_fit()%>%tidy()
+```
+
+**TUNE**
+
+```{r}
+## TUNE
+set.seed(123)
+
+egg_boot <- bootstraps(train_data, strata = prod_process)
+
+tune_spec <- linear_reg(penalty = tune(), mixture = 1) %>% 
+  set_engine("glmnet")
+
+lambda_grid<-grid_regular(penalty(),
+             levels = 50)
+
+set.seed(2023)
+lasso_grid<- tune_grid(
+  lr_workflow %>% add_model(tune_spec),
+  resamples = egg_boot,
+  grid = lambda_grid) #for each resample, trains the model
+
+lasso_grid%>%
+  collect_metrics()%>%
+  ggplot(aes(x=penalty, y=mean, color = .metric)) + 
+  # geom_errorbar(aes(ymin = mean - std_err, 
+  #            ymax = mean + std_err),  alpha = 0.5 ) +
+  geom_line(show.legend = F)+
+  facet_wrap(.~.metric, scales = "free")
+
+lowest_rmse<-lasso_grid %>% 
+  select_best("rmse", maximize = F) # lowest rmse not highest 
+# shows penalty
+
+final_lasso <- finalize_workflow(lr_workflow %>% add_model(tune_spec),
+                  lowest_rmse) #is a workflow
+```
+
+**FIT**
+
+```{r}
+#FIT IT
+final_lasso%>%
+  fit(train_data) %>%
+  pull_workflow_fit() %>% 
+  vi(lambda = lowest_rmse$penalty) %>%
+  ggplot(aes(x=Importance, y=Variable, fill = Sign)) + 
+  geom_col()
+
+#for each variable in model, shows importance based on the lowest penalty in the workflow
+```
+
+**TEST**
+
+```{r}
+# TEST 
+last_fit(final_lasso, 
+         data_split) %>%
+  collect_metrics()
+
+```
+
+## Random Forest
+
+```{r}
+
+cores <- parallel::detectCores()
+cores
+
+rf_mod <- 
+  rand_forest(mtry = tune(), min_n = tune(), trees = 1000) %>% 
+  set_engine("ranger", num.threads = cores) %>% 
+  set_mode("regression")
+
+rf_workflow <- 
+  workflow() %>% 
+  add_model(rf_mod) %>% 
+  add_recipe(egg_rates_recipe)
+
+set.seed(123)
+rf_res <- 
+  rf_workflow %>% 
+  tune_grid(folds,
+            grid = 4,
+            control = control_grid(save_pred = TRUE),
+            metrics = metric_set(rmse))
+
+rf_res %>% 
+  show_best(metric = "rmse")
+
+autoplot(rf_res)
+
+rf_best <- 
+  rf_res %>% 
+  select_best(metric = "rmse")
+rf_best
+
+rf_res %>% 
+  collect_predictions()
+
+rf_rmse <- 
+  rf_res %>% 
+  collect_predictions(parameters = rf_best) 
+rf_rmse
+
+
+```
+
+# Model Evaluation
+
+There are several obvious drawbacks to these methods. I was trying to determine the month with the largest impact on egg production, controlled for egg production type. However, the tidymodels framework did not allow for this or eliminating the variable to only include month. Therefore, since conventional production was such a large percentage of the eggs produced, it was often included in the model. This was especially evidenced in the decision tree. Therefore, this scored the most poorly of all the models since it could not discern any other variations within the data.
+
+Next, and I think this is user error, is I'm not sure how to pull out the significant predictors for random forest models. I'm not sure if I'm overlooking a basic command or if this is so much of a "black box" model that we just have to take it at its word. For this reason, I would not choose to use a model.
+
+Then, we have the null model. It's great for averages, but does not give us good change over time, and its RMSE was insanely high for both the trained and tested data. But it's an average, which can't go too wrong, just not very powerful for answering questions about the data itself. 
+
+That leaves the LASSO model. I switched workflows to mirror one from a tidymodels creator, and it was very helpful and intuitive to what the steps in the code were doing. I'm not sure if these can be applied to other model types because by the end of this exercise workflows, parameters, and grids were swimming too much in my head to identify the exact differences in coding styles and apply it to the other model types. 
+
+I really liked being able to see the importance of the factors using the graph  in the final fit. As predicted, February had a very strong negative effect on egg production, while March actually had a positive impact on egg production - likely a strong bounce-back after the dip in February. I wonder again if the strong impact of production type overshadows the true impact other months have, as I doubt that all months truly have a negative impact on egg production since the general trend of egg production overtime was increased. However, I'm not sure how effective these models actually are since the visual of RMSE/RSQ were straight lines. Again, I don't know if it's the model, or how I coded it which actually created the error.
+
+Overall, this exercise helped strengthen my understanding of tidymodels, but I still have a long way to go, especially with tree-based designs and truly comprehending how this framework works to adapt to different data.
+
+

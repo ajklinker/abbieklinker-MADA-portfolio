@@ -18,8 +18,8 @@ website:
             href: ./visualization_exercise.html
           - text: "Tidy Tuesday Exercise"
             href: ./tidytuesday_exercise.html
-          - text: "Tidy Tuesday 2 Exercise"
-          - href: ./tidytuesday_exercise2.html
+          - text: "Tidy Tuesday Exercise 2"
+            href: ./tidytuesday_exercise2.html
       - text: "Flu Analysis Exercise"
         menu:
           - text: "Wrangling"
